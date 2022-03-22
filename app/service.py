@@ -1,4 +1,3 @@
-from app.config import stripe
 from app.aws import AWSInstance
 from app.config import Config
 from app.dbUtil import AppDBUtil

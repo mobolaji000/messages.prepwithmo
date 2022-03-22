@@ -1,4 +1,3 @@
-from app.models import Transaction,InstallmentPlan,InvoiceToBePaid,Prospect,Student,Lead
 from app import db
 
 import logging

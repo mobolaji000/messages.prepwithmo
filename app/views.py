@@ -13,7 +13,6 @@ import os
 import math
 import uuid
 import traceback
-from app.config import stripe
 from apscheduler.schedulers.background import BackgroundScheduler
 
 import logging
