@@ -1,7 +1,16 @@
 import os
+from twilio.rest import Client as TwilioClient
 from app.aws import AWSInstance
 basedir = os.path.abspath(os.path.dirname(__file__))
 awsInstance = AWSInstance()
+
+from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
+from apscheduler.schedulers.background import BackgroundScheduler
+
+
+
+
 class Config(object):
     try:
         if os.environ['DEPLOY_REGION'] == 'local':
@@ -14,6 +23,28 @@ class Config(object):
             SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://'+str(dbUserName)+':'+str(dbPassword)+'@host/mobolajioo'
             SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+            twilio_account_sid = os.environ['TWILIO_ACCOUNT_SID']
+            twilio_auth_token = os.environ['TWILIO_AUTH_TOKEN']
+            twilio_sms_number = os.environ['TWILIO_SMS_NUMBER']
+            twilio_messaging_service_sid = os.environ['TWILIO_MESSAGING_SERVICE_SID']
+
+            twilioClient = TwilioClient(twilio_account_sid, twilio_auth_token)
+
+            MAX_CONTENT_LENGT = 1024 * 1024
+            UPLOAD_EXTENSIONS = ['.jpg', '.png', '.gif', '.jpeg', '.pdf', '.txt', '.doc', '.docx', '.xlsx', '.xls', '.tiff']
+            UPLOAD_PATH = '/app/data/uploads'
+
+            SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly', 'https://www.googleapis.com/auth/drive.file']
+            CLIENT_SECRETS_FILE = '/app/data/credentials.json'
+
+            os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+            os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
+
+            Google_Drive_Email_Attachment_Folder = '14dATc_XlxaqktxDXkIhk8s2KpnMyH5JQ'
+            Google_Drive_SMS_Attachment_Folder = '1wOLeYUMJFAuzOxw0BjG2YQnZ7HBHsUZg'
+
+
+
         elif os.environ['DEPLOY_REGION'] == 'dev':
 
             os.environ["url_to_start_reminder"] = "https://dev-pay-perfectscoremo-7stpz.ondigitalocean.app/"
@@ -23,6 +54,17 @@ class Config(object):
             dbPassword = awsInstance.get_secret("do_db_cred", "dev_password")
             SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://'+str(dbUserName)+':'+str(dbPassword)+'@app-27fee962-3fa3-41cb-aecc-35d29dbd568e-do-user-9096158-0.b.db.ondigitalocean.com:25060/db'
             SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+            twilio_account_sid = awsInstance.get_secret("twilio_cred", "TWILIO_ACCOUNT_SID")
+            twilio_auth_token = awsInstance.get_secret("twilio_cred", "TWILIO_AUTH_TOKEN")
+            twilioClient = TwilioClient(twilio_account_sid, twilio_auth_token)
+
+            MAX_CONTENT_LENGT = 1024 * 1024
+            UPLOAD_EXTENSIONS = ['.jpg', '.png', '.gif']
+            UPLOAD_PATH = '/app/data/uploads'
+
+            #os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+            #TODO put google crewdentials in Digigtal Ocean environment variables and encryt it for dev and prod
 
 
         elif os.environ['DEPLOY_REGION'] == 'prod':
@@ -35,6 +77,31 @@ class Config(object):
             dbPassword = awsInstance.get_secret("do_db_cred", "password")
             SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://' + str(dbUserName) + ':' + str(dbPassword) + '@app-36443af6-ab5a-4b47-a64e-564101e951d6-do-user-9096158-0.b.db.ondigitalocean.com:25060/db'
             SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+            twilio_account_sid = awsInstance.get_secret("twilio_cred", "TWILIO_ACCOUNT_SID")
+            twilio_auth_token = awsInstance.get_secret("twilio_cred", "TWILIO_AUTH_TOKEN")
+            twilioClient = TwilioClient(twilio_account_sid, twilio_auth_token)
+
+            MAX_CONTENT_LENGT = 1024 * 1024
+            UPLOAD_EXTENSIONS = ['.jpg', '.png', '.gif']
+            UPLOAD_PATH = '/app/data/uploads'
+
+            #os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
+        jobstores = {
+            # 'mongo': SQLAlchemyJobStore(),
+            'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
+        }
+        executors = {
+            # 'default': ThreadPoolExecutor(20),
+            'processpool': ProcessPoolExecutor(5)
+        }
+        job_defaults = {
+            # 'coalesce': False,
+            # 'max_instances': 3
+        }
+        scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone='US/Central')
+
 
 
     except Exception as e:

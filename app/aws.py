@@ -1,7 +1,10 @@
-import boto3
-import os
 import json
+import os
+import boto3
 from botocore.exceptions import ClientError
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
 
 class AWSInstance():
     def __init__(self):
@@ -65,124 +68,69 @@ class AWSInstance():
         return secret
 
 
-    def send_email(self, to_addresses='mo@vensti.com', message='perfectscoremo', subject='perfectscoremo', type=''):
-
-        if type == 'create_transaction_new_client':
-            created_or_modified_span = "<span>Your transaction has just been <strong>created</strong>. Here are the payment/signup instructions/options (also sent to your phone number):</span><br><br>"
-        elif type == 'modify_transaction_new_client':
-            created_or_modified_span = "<span>Your transaction has just been <strong>modified</strong>. Here are the payment/signup instructions/options (also sent to your phone number):</span><br><br>"
-        elif type == 'reminder_to_make_payment':
-            created_or_modified_span = "<span>This is an automated reminder that your transaction <strong>is due</strong>. Here are the payment/signup instructions/options (also sent to your phone number):</span><br><br>"
-        elif type == 'create_transaction_existing_client':
-            created_or_modified_span = "<span>Your new transaction has been created using your method of payment on file, but there have been <strong>no charges</strong>. You can always change your method of payment between now and the date of your first payment. Here are the payment instructions/options to change your method of payment (also sent to your phone number):</span><br><br>"
-        elif type == 'modify_transaction_existing_client':
-            created_or_modified_span = "<span>Your transaction has just been modified using your method of payment on file, but there have been <strong>no charges</strong>. You can always change your method of payment between now and the date of your first payment. Here are the payment instructions/options to change your method of payment (also sent to your phone number):</span><br><br>"
-
-
+    def send_email(self, to_addresses=['mo@vensti.com'], message='perfectscoremo', subject='perfectscoremo',email_attachments_and_their_details={}):
         SENDER = "Perfect Score Mo <mo@info.perfectscoremo.com>"
-        RECIPIENT = [to_addresses] if isinstance(to_addresses, str) else to_addresses
+        RECIPIENT = to_addresses#+['mo@vensti.com'], #TODO uncomment this after you are done testing; this ensures you are copied in every email so you can catch errors. After a while, you can set up a Gmail filter for these to go to so your inbox is not overwhelmed
         SUBJECT = subject
 
         # The email body for recipients with non-HTML email clients.
-        BODY_TEXT = ("Amazon SES Test (Python)\r\n"
-                     "This email was sent with Amazon SES using the "
-                     "AWS SDK for Python (Boto). "+message
-                     )
+        BODY_TEXT = "Hello,\r\nYour email client can't read this message."
 
-        if type == 'student_info':
-            link_url = os.environ["url_to_start_reminder"]+"""client_info/"""+message
-            BODY_HTML = """<html>
-                <head></head>
-                <body>
-                  <span>Dear Parent, </span><br><br>""" \
-                    + """<span>Thank you for signing up with us! </span><br><br>""" \
-                    + """<span>Regular communication between us, you, and your student is a big part of our process. </span>""" \
-                    + """<span>To help further that, please go to <strong><a href='"""+link_url+"""'>"""+link_url+"""</a></strong> (also sent to your phone number) to input you and your student's information.</span><br>""" \
-                    + """<br><br><span>This will be used to setup text message and email updates on your student's regular progress.</span><br>""" \
-                        + """<br><span>Regards,</span><br>""" \
-                        + """<span>Mo</span><br>""" \
-                        + """
-                </body>
-                </html>
-                            """
-        elif type == 'create_group_email':
-            BODY_HTML = """<html>
-                <head></head>
-                <body>
-                  <span>Welcome """+message+"""!</span><br><br>""" \
-                    + """<span>Regular communication between us all is a big part of our process. </span>""" \
-                        + """<span>To help further that, you will receive regular updates on our progress via this group email.</span><br><br>""" \
-                    + """<span>You can also reach me at mo@perfectscoremo.com</span><br>""" \
-                        + """<br><span>Regards,</span><br>""" \
-                        + """<span>Mo</span><br>""" \
-                        + """
-                </body>
-                </html>
-                            """
-        elif type == 'to_mo':
-            BODY_HTML = """<html>
-                    <head></head>
-                    <body>
-                      <span>Logging message: """ + message + """!</span><br><br>""" \
-                        + """
-                    </body>
-                    </html>
-                                """
-        else:
-            BODY_HTML = """<html>
-                            <head></head>
-                            <body>
-                              <span>Dear Parent, </span><br>""" \
-                        + """<span><strong>PLEASE READ CAREFULLY!!</strong></span><br><br>""" \
-                        + created_or_modified_span \
-                        + """<span>1. Go to perfectscoremo.com</span><br>""" \
-                        + """<span>2. Choose ‘Make A Payment’ from the menu</span><br>""" \
-                        + """<span>3. Enter your code: </span>""" + "<strong>" + message + "</strong><br>" \
-                        + """<span>4. If required, enter the student's contact information and the days/times that work best for their sessions. This will be used to reserve their slot in our calendar and to setup text message and email updates on their regular progress. </span><br>""" \
-                        + """<span>5. Read the instructions and transaction and choose a method of payment</span><br>""" \
-                        + """<span>6. Please pay attention to the mode of payment you choose. Cards come with fees and ACH is free</span><br>""" \
-                        + """<span>7. For installment payments, these are accepted: Credit Cards, Debit Cards</span><br>""" \
-                        + """<span>8. For full payments, these are accepted: Credit Cards, Debit Cards, ACH</span><br>""" \
-                        + """<br><span>Regards,</span><br>""" \
-                        + """<span>Mo</span><br>""" \
-                        + """
-                            </body>
-                            </html>
-                                        """
-
+        BODY_HTML = message
 
         CHARSET = "UTF-8"
         client = self.getInstance('ses')
+        # Create a multipart/mixed parent container.
+        msg = MIMEMultipart('mixed')
+        # Add subject, from and to lines.
+        msg['Subject'] = SUBJECT
+        msg['From'] = SENDER
+        msg['To'] = ', '.join(RECIPIENT)
+
+        # Create a multipart/alternative child container.
+        msg_body = MIMEMultipart('alternative')
+
+        # Encode the text and HTML content and set the character encoding. This step is
+        # necessary if you're sending a message with characters outside the ASCII range.
+        textpart = MIMEText(BODY_TEXT.encode(CHARSET), 'plain', CHARSET)
+        htmlpart = MIMEText(BODY_HTML.encode(CHARSET), 'html', CHARSET)
+
+        # Add the text and HTML parts to the child container.
+        msg_body.attach(textpart)
+        msg_body.attach(htmlpart)
+
+        for attachment_id,(attachment_name,attachment) in email_attachments_and_their_details.items():
+            ATTACHMENT = attachment_name
+
+            #att = MIMEApplication(open(ATTACHMENT, 'rb').read())
+            att = MIMEApplication(attachment.getvalue())
+
+            #att.add_header('Content-Disposition', 'attachment', filename=os.path.basename(ATTACHMENT))
+            att.add_header('Content-Disposition', 'attachment', filename=ATTACHMENT)
+
+            # Add the attachment to the parent container.
+            msg.attach(att)
+        # print(msg)
+
+        # Attach the multipart/alternative child container to the multipart/mixed
+        # parent container.
+        msg.attach(msg_body)
+
         try:
-            response = client.send_email(
-                Destination={
-                    'ToAddresses': RECIPIENT,
-                },
-                Message={
-                    'Body': {
-                        'Html': {
-                            'Charset': CHARSET,
-                            'Data': BODY_HTML,
-                        },
-                        'Text': {
-                            'Charset': CHARSET,
-                            'Data': BODY_TEXT,
-                        },
-                    },
-                    'Subject': {
-                        'Charset': CHARSET,
-                        'Data': SUBJECT,
-                    },
-                },
+            # Provide the contents of the email.
+            response = client.send_raw_email(
                 Source=SENDER,
-                ReplyToAddresses=[
-                    'mo@perfectscoremo.com',
+                Destinations=[
+                    ', '.join(RECIPIENT)
                 ],
+                RawMessage={
+                    'Data': msg.as_string(),
+                },
             )
+        # Display an error if something goes wrong.
         except ClientError as e:
             print(e.response['Error']['Message'])
         else:
+            #TODO print job id in logs that same email is sent. Same for sms. Will make debugging easier.
             print("Email sent! Message ID:"),
             print(response['MessageId'])
-            print(BODY_HTML)
-

@@ -1,6 +1,5 @@
-Flask==1.1.2
+Flask==2.1.0
 Flask-WTF==0.14.3
-python-dotenv==0.15.0
 WTForms==2.3.3
 Flask-SQLAlchemy==2.5.1
 Flask-Migrate==2.5.3
@@ -13,8 +12,21 @@ plaid-python==7.2.0
 psycopg2-binary==2.8.6
 python-http-client==3.3.2
 #starkbank-ecdsa==1.1.0
-PyJWT==1.7.1
-twilio==6.57.0
+PyJWT==2.0.0
+twilio==7.9.0
 APScheduler==3.7.0
+pandas==1.4.1
+colorama==0.4.4
+python-dotenv==0.15.0
+google-api-python-client==2.34.0
+google-auth-httplib2==0.1.0
+google-auth-oauthlib==0.4.6
+google-cloud-storage==1.44.0
+google-auth==2.3.3
+beautifulsoup4==4.10.0
+lxml==4.7.1
+Jinja2==3.0.3
+itsdangerous==2.0.1
+werkzeug==2.0.2
 
 
