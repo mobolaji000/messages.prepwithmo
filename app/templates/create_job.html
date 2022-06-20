@@ -8,6 +8,8 @@
 
 	<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.5.3/dist/fuse.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.12.0/jquery.validate.js"></script>
+
 
 		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 
@@ -81,25 +83,24 @@
         $('#allSMSRecipients').val(allSMSRecipients);
     }
 
-	function finalCheckBeforeSubmit()
-	{
+	function finalCheckBeforeSubmit() {
 
-        var job_ui_state = JSON.parse( $("#job_ui_state").attr("data-job_ui_state"));
+        var job_ui_state = JSON.parse($("#job_ui_state").attr("data-job_ui_state"));
 
-        if(typeof job_ui_state['ids_of_attached_files_if_any'] !== "undefined")
-		{
-			var decided_on_attachment = confirm("Have you made sure to decide on attachement that came with job modification?");
+        //alert(job_ui_state);
+
+            if (job_ui_state !== null && typeof job_ui_state['ids_of_attached_files_if_any'] !== "undefined")
+        {
+            var decided_on_attachment = confirm("Have you made sure to decide on attachement that came with job modification?");
             console.log(decided_on_attachment);
-			if (decided_on_attachment) {
-				doTheCheck();
-			}
-			else {
-				event.preventDefault();
-			}
-		}
+            if (decided_on_attachment) {
+                doTheCheck();
+            } else {
+                event.preventDefault();
+            }
+        }
 
         doTheCheck();
-
 	}
 
 	</script>
@@ -280,28 +281,31 @@
 
   <div id="emailCronJobDetails" name="emailCronJobDetails" class="row justify-content-center">
 
+	   <div id="emailCronJobInstruction" name="emailCronJobInstruction" class="my-3 row justify-content-center">
+	  <span style="color:red;font-size:15px;">Fields greater than the least significant explicitly defined field default to * while lesser fields default to their minimum values except for Week and Day of Week which default to *</span>
+	   </div>
 				  <div id="emailCronJobDetails1" name="emailCronJobDetails1" class="my-3 row justify-content-center">
     <div class="col-auto">
       <label for="email_cron_year">Year</label>
-      <input type="number" class="form-control mb-2" id="email_cron_year" name="email_cron_year" placeholder="2022" min="2022" required>
+      <input type="text" class="form-control mb-2" id="email_cron_year" name="email_cron_year" placeholder="2022">
     </div>
    <div class="col-auto">
       <label for="email_cron_month">Month</label>
-      <input type="number" class="form-control mb-2" id="email_cron_month" name="email_cron_month" placeholder="0" min="1" max="12" required>
+      <input type="text" class="form-control mb-2" id="email_cron_month" name="email_cron_month" placeholder="1 to 12">
     </div>
 					  <div class="col-auto">
       <label for="email_cron_day">Day</label>
-      <input type="number" class="form-control mb-2" id="email_cron_day" name="email_cron_day" placeholder="0" min="1" max="31" required>
+      <input type="text" class="form-control mb-2" id="email_cron_day" name="email_cron_day" placeholder="1 to 31">
     </div>
 
 					   <div class="col-auto">
       <label for="email_cron_week">Week</label>
-      <input type="number" class="form-control mb-2" id="email_cron_week" name="email_cron_week" placeholder="0" min="1" max="53" required>
+      <input type="text" class="form-control mb-2" id="email_cron_week" name="email_cron_week" placeholder="1 to 53">
     </div>
 
 					  <div class="col-auto">
       <label for="email_cron_day_of_week">Day of Week</label>
-<select class="form-control mb-2" id="email_cron_day_of_week" name="email_cron_day_of_week"   required>
+<select class="form-control mb-2" id="email_cron_day_of_week" name="email_cron_day_of_week">
 <option value="" selected></option>
 		  <option value='mon'>Monday</option>
 	<option value='tue'>Tuesday</option>
@@ -310,22 +314,23 @@
 	<option value='fri'>Friday</option>
 	<option value='sat'>Saturday</option>
 		  <option value='sun'>Sunday</option>
+	<option value="*" hidden>*</option>
 </select>
     </div>
 
 					  <div class="col-auto">
       <label for="email_cron_hour">Hour</label>
-      <input type="number" class="form-control mb-2" id="email_cron_hour" name="email_cron_hour" placeholder="0" min="0" max="23" required>
+      <input type="text" class="form-control mb-2" id="email_cron_hour" name="email_cron_hour" placeholder="0 to 23">
     </div>
 
 					  <div class="col-auto">
       <label for="email_cron_minute">Minute</label>
-      <input type="number" class="form-control mb-2" id="email_cron_minute" name="email_cron_minute" placeholder="0" min="0" max="59" required>
+      <input type="text" class="form-control mb-2" id="email_cron_minute" name="email_cron_minute" placeholder="0 to 59">
     </div>
 
 					  <div class="col-auto">
       <label for="email_cron_second">Second</label>
-      <input type="number" class="form-control mb-2" id="email_cron_second" name="email_cron_second" placeholder="0" min="0" max="59" required>
+      <input type="text" class="form-control mb-2" id="email_cron_second" name="email_cron_second" placeholder="0 to 59">
     </div>
 
 				   </div>
@@ -356,27 +361,27 @@
 				  <div id="emailIntervalJobDetails1" name="emailIntervalJobDetails1" class="my-3 row justify-content-center">
 					  				   <div class="col-2">
       <label for="email_interval_weeks">Weeks</label>
-      <input type="number" class="form-control mb-2" id="email_interval_weeks" name="email_interval_weeks" placeholder="0" min="0"  required>
+      <input type="number" class="form-control mb-2" id="email_interval_weeks" name="email_interval_weeks" value="0" min="0"  required>
     </div>
 
 					  <div class="col-2">
       <label for="email_interval_days">Days</label>
-      <input type="number" class="form-control mb-2" id="email_interval_days" name="email_interval_days" placeholder="0" min="0"  required>
+      <input type="number" class="form-control mb-2" id="email_interval_days" name="email_interval_days" value="0" min="0"  required>
     </div>
 
 					  <div class="col-2">
       <label for="email_interval_hours">Hours</label>
-      <input type="number" class="form-control mb-2" id="email_interval_hours" name="email_interval_hours" placeholder="0" min="0"  required>
+      <input type="number" class="form-control mb-2" id="email_interval_hours" name="email_interval_hours" value="0" min="0"  required>
     </div>
 
 					  <div class="col-2">
       <label for="email_interval_minutes">Minutes</label>
-      <input type="number" class="form-control mb-2" id="email_interval_minutes" name="email_interval_minutes" placeholder="0" min="0" required>
+      <input type="number" class="form-control mb-2" id="email_interval_minutes" name="email_interval_minutes" value="0" min="0" required>
     </div>
 
 					  <div class="col-2">
       <label for="email_interval_seconds">Seconds</label>
-      <input type="number" class="form-control mb-2" id="email_interval_seconds" name="email_interval_seconds" placeholder="0" min="0"  required>
+      <input type="number" class="form-control mb-2" id="email_interval_seconds" name="email_interval_seconds" value="0" min="0"  required>
     </div>
 
 				   </div>
@@ -569,26 +574,28 @@
 
 <div id="smsCronJobDetails" name="smsCronJobDetails" class="row justify-content-center">
 
+	<div id="smsCronJobInstruction" name="smsCronJobInstruction" class="my-3 row justify-content-center">
+	  <span style="color:red;font-size:15px;">Fields greater than the least significant explicitly defined field default to * while lesser fields default to their minimum values except for Week and Day of Week which default to *</span>
+	   </div>
+
              <div id="smsCronJobDetails1" name="smsCronJobDetails1" class="my-3 row justify-content-center">
 <div class="col-auto">
  <label for="sms_cron_year">Year</label>
- <input type="number" class="form-control mb-2" id="sms_cron_year" name="sms_cron_year" placeholder="2022" min="2022" required>
+ <input type="text" class="form-control mb-2" id="sms_cron_year" name="sms_cron_year" placeholder="2022" >
 </div>
 <div class="col-auto">
  <label for="sms_cron_month">Month</label>
- <input type="number" class="form-control mb-2" id="sms_cron_month" name="sms_cron_month" placeholder="0" min="1" max="12" required>
+ <input type="text" class="form-control mb-2" id="sms_cron_month" name="sms_cron_month" placeholder="0 to 12">
 </div>
                  <div class="col-auto">
  <label for="sms_cron_day">Day</label>
- <input type="number" class="form-control mb-2" id="sms_cron_day" name="sms_cron_day" placeholder="0" min="1" max="31" required>
+ <input type="text" class="form-control mb-2" id="sms_cron_day" name="sms_cron_day" placeholder="1 to 31">
 </div>
 
                   <div class="col-auto">
  <label for="sms_cron_week">Week</label>
- <input type="number" class="form-control mb-2" id="sms_cron_week" name="sms_cron_week" placeholder="0" min="1" max="53" required>
+ <input type="text" class="form-control mb-2" id="sms_cron_week" name="sms_cron_week" placeholder="1 to 53">
 </div>
-
-<!--TODO Create more nuanced rules around is required and what is optional for cron on the UI bsed on https://apscheduler.readthedocs.io/en/3.x/modules/triggers/cron.html . Perhaps also auto-set some options to * based on the rules at https://apscheduler.readthedocs.io/en/3.x/modules/triggers/cron.html-->
 
                  <div class="col-auto">
  <label for="sms_cron_day_of_week">Day of Week</label>
@@ -601,22 +608,23 @@
 <option value='fri'>Friday</option>
 <option value='sat'>Saturday</option>
      <option value='sun'>Sunday</option>
+	<option value="*" hidden>*</option>
 </select>
 </div>
 
                  <div class="col-auto">
  <label for="sms_cron_hour">Hour</label>
- <input type="number" class="form-control mb-2" id="sms_cron_hour" name="sms_cron_hour" placeholder="0" min="0" max="23" required>
+ <input type="text" class="form-control mb-2" id="sms_cron_hour" name="sms_cron_hour" placeholder="0 to 23">
 </div>
 
                  <div class="col-auto">
  <label for="sms_cron_minute">Minute</label>
- <input type="number" class="form-control mb-2" id="sms_cron_minute" name="sms_cron_minute" placeholder="0" min="0" max="59" required>
+ <input type="text" class="form-control mb-2" id="sms_cron_minute" name="sms_cron_minute" placeholder="0 to 59">
 </div>
 
                  <div class="col-auto">
  <label for="sms_cron_second">Second</label>
- <input type="number" class="form-control mb-2" id="sms_cron_second" name="sms_cron_second" placeholder="0" min="0" max="59" required>
+ <input type="text" class="form-control mb-2" id="sms_cron_second" name="sms_cron_second" placeholder="0 to 59">
 </div>
 
               </div>
@@ -647,27 +655,27 @@
              <div id="smsIntervalJobDetails1" name="smsIntervalJobDetails1" class="my-3 row justify-content-center">
                                     <div class="col-2">
  <label for="sms_interval_weeks">Weeks</label>
- <input type="number" class="form-control mb-2" id="sms_interval_weeks" name="sms_interval_weeks" placeholder="0" min="0"  required>
+ <input type="number" class="form-control mb-2" id="sms_interval_weeks" name="sms_interval_weeks" value="0" min="0"  required>
 </div>
 
                  <div class="col-2">
  <label for="sms_interval_days">Days</label>
- <input type="number" class="form-control mb-2" id="sms_interval_days" name="sms_interval_days" placeholder="0" min="0"  required>
+ <input type="number" class="form-control mb-2" id="sms_interval_days" name="sms_interval_days" value="0" min="0"  required>
 </div>
 
                  <div class="col-2">
  <label for="sms_interval_hours">Hours</label>
- <input type="number" class="form-control mb-2" id="sms_interval_hours" name="sms_interval_hours" placeholder="0" min="0"  required>
+ <input type="number" class="form-control mb-2" id="sms_interval_hours" name="sms_interval_hours" value="0" min="0"  required>
 </div>
 
                  <div class="col-2">
  <label for="sms_interval_minutes">Minutes</label>
- <input type="number" class="form-control mb-2" id="sms_interval_minutes" name="sms_interval_minutes" placeholder="0" min="0" required>
+ <input type="number" class="form-control mb-2" id="sms_interval_minutes" name="sms_interval_minutes" value="0" min="0" required>
 </div>
 
                  <div class="col-2">
  <label for="sms_interval_seconds">Seconds</label>
- <input type="number" class="form-control mb-2" id="sms_interval_seconds" name="sms_interval_seconds" placeholder="0" min="0"  required>
+ <input type="number" class="form-control mb-2" id="sms_interval_seconds" name="sms_interval_seconds" value="0" min="0"  required>
 </div>
 
               </div>

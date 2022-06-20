@@ -18,7 +18,7 @@ $(document).ready(function() {
          //change paste keyup
             $('#emailSearchInput').on('input', function(event) {
                 let emailSearchValue = event.target.value;
-                console.log(emailSearchValue);
+                //console.log(emailSearchValue);
                 let emailSearchResults = fuse.search(emailSearchValue);
                 $('#emailSearchResults').empty();
 
@@ -116,6 +116,15 @@ $(document).ready(function() {
          }
 
      });
+
+
+
+
+     // $('#email_cron_year,#email_cron_month,#email_cron_day,#email_cron_week,#email_cron_day_of_week,#email_cron_hour,#email_cron_minute,#email_cron_second').on('keyup', function(event) {
+     //
+     //
+     //        });
+
 
      $('#emailResetButton').on('click', function(event) {
          // $("#allEmailInformation:input, #allEmailInformation select")
@@ -614,8 +623,233 @@ emailRecipientCounter = Number(emailRecipientCounter) + 1;
            }
             });
 
+        function validateEmailCronInputsAndSetDefaults()
+        {
+            var submitForm = true;
+           var cron_fields_to_validate = ['#email_cron_second','#email_cron_minute','#email_cron_hour','#email_cron_day_of_week','#email_cron_week','#email_cron_day','#email_cron_month','#email_cron_year'];
 
-       $('#sendMessagesButton').on('click', function(event) {
+            var index_of_least_significant_explicitly_defined_field = -99;
+         var least_significant_explicitly_defined_field_found = false;
+
+         cron_fields_to_validate.forEach(function (cron_field, i) {
+            console.log('%d: %s: %s', i, cron_field, $(cron_field).val());
+
+                if (least_significant_explicitly_defined_field_found) {
+                return;
+                }
+                console.log("val: "+$(cron_field).val())
+                 if ($(cron_field).val() != "")
+                 {
+                    least_significant_explicitly_defined_field_found = true;
+                    index_of_least_significant_explicitly_defined_field = i;
+                     console.log("index_of_least_significant_explicitly_defined_field: "+i.toString())
+                 }
+
+            });
+
+        cron_fields_to_validate.slice(0, index_of_least_significant_explicitly_defined_field).forEach(function (cron_field, i) {
+
+        console.log('%d: %s: %s', i, cron_field, $(cron_field).val());
+
+                if ((cron_field == '#email_cron_second' || cron_field == '#email_cron_minute' || cron_field == '#email_cron_hour') && $(cron_field).val() == '') {
+                     $(cron_field).val('0');
+                }
+                if ((cron_field == '#email_cron_month' || cron_field == '#email_cron_day') && $(cron_field).val() == '') {
+                $(cron_field).val('1');
+                }
+                if ((cron_field == '#email_cron_week' || cron_field == '#email_cron_day_of_week') && $(cron_field).val() == '') {
+                $(cron_field).val('*');
+                }
+
+            });
+
+        cron_fields_to_validate.slice(index_of_least_significant_explicitly_defined_field+1).forEach(function (cron_field, i) {
+        console.log('%d: %s: %s', i, cron_field, $(cron_field).val());
+        if($(cron_field).val() == '')
+        {
+             $(cron_field).val('*');
+        }
+            });
+
+        //for testing
+           var print_alert = "";
+        cron_fields_to_validate.forEach(function (cron_field, i) {
+            print_alert = print_alert + " " + cron_field + ": " + $(cron_field).val() + "\n"
+        });
+        console.log(print_alert);
+
+        for (var cron_field of cron_fields_to_validate)
+             {
+                 let isNumber = /^\d+$/.test($(cron_field).val());
+
+                 if ($(cron_field).val() != "*") {
+                      if (!isNumber ) {
+                          submitForm = false;
+                          $(cron_field).attr('style', "border-radius: 5px; border:#FF0000 1px solid;");
+                          $(cron_field).css("border", "1px solid red");
+                      }
+                      else{
+                          if (cron_field == '#email_cron_second'  && (Number($(cron_field).val()) < 0 || Number($(cron_field).val()) > 59)) {
+                            submitForm = false;
+                            $(cron_field).attr('style', "border-radius: 5px; border:#FF0000 1px solid;");
+                            $(cron_field).css("border", "1px solid red");
+                            }
+                          if (cron_field == '#email_cron_minute'  && (Number($(cron_field).val()) < 0 || Number($(cron_field).val()) > 59)) {
+                            submitForm = false;
+                            $(cron_field).attr('style', "border-radius: 5px; border:#FF0000 1px solid;");
+                            $(cron_field).css("border", "1px solid red");
+                            }
+                          if (cron_field == '#email_cron_hour'  && (Number($(cron_field).val()) < 0 || Number($(cron_field).val()) > 23)) {
+                            submitForm = false;
+                            $(cron_field).attr('style', "border-radius: 5px; border:#FF0000 1px solid;");
+                            $(cron_field).css("border", "1px solid red");
+                            }
+                          if (cron_field == '#email_cron_week'  && (Number($(cron_field).val()) < 1 || Number($(cron_field).val()) > 53)) {
+                            submitForm = false;
+                            $(cron_field).attr('style', "border-radius: 5px; border:#FF0000 1px solid;");
+                            $(cron_field).css("border", "1px solid red");
+                            }
+                          if (cron_field == '#email_cron_day'  && (Number($(cron_field).val()) < 1 || Number($(cron_field).val()) > 31)) {
+                            submitForm = false;
+                            $(cron_field).attr('style', "border-radius: 5px; border:#FF0000 1px solid;");
+                            $(cron_field).css("border", "1px solid red");
+                            }
+                          if (cron_field == '#email_cron_month'  && (Number($(cron_field).val()) < 1 || Number($(cron_field).val()) > 12)) {
+                            submitForm = false;
+                            $(cron_field).attr('style', "border-radius: 5px; border:#FF0000 1px solid;");
+                            $(cron_field).css("border", "1px solid red");
+                            }
+
+                          if (cron_field == '#email_cron_year'  && Number($(cron_field).val()) < 2022 ) {
+                            submitForm = false;
+                            $(cron_field).attr('style', "border-radius: 5px; border:#FF0000 1px solid;");
+                            $(cron_field).css("border", "1px solid red");
+                            }
+                      }
+                 }
+             }
+
+             if(!submitForm)
+             {
+                 event.preventDefault();
+                event.stopPropagation();
+             }
+        }
+
+        function validateSMSCronInputsAndSetDefaults()
+        {
+            var submitForm = true;
+           var cron_fields_to_validate = ['#sms_cron_second','#sms_cron_minute','#sms_cron_hour','#sms_cron_day_of_week','#sms_cron_week','#sms_cron_day','#sms_cron_month','#sms_cron_year'];
+
+            var index_of_least_significant_explicitly_defined_field = -99;
+         var least_significant_explicitly_defined_field_found = false;
+
+         cron_fields_to_validate.forEach(function (cron_field, i) {
+            console.log('%d: %s: %s', i, cron_field, $(cron_field).val());
+
+                if (least_significant_explicitly_defined_field_found) {
+                return;
+                }
+                console.log("val: "+$(cron_field).val())
+                 if ($(cron_field).val() != "")
+                 {
+                    least_significant_explicitly_defined_field_found = true;
+                    index_of_least_significant_explicitly_defined_field = i;
+                     console.log("index_of_least_significant_explicitly_defined_field: "+i.toString())
+                 }
+
+            });
+
+        cron_fields_to_validate.slice(0, index_of_least_significant_explicitly_defined_field).forEach(function (cron_field, i) {
+
+        console.log('%d: %s: %s', i, cron_field, $(cron_field).val());
+
+                if ((cron_field == '#sms_cron_second' || cron_field == '#sms_cron_minute' || cron_field == '#sms_cron_hour') && $(cron_field).val() == '') {
+                     $(cron_field).val('0');
+                }
+                if ((cron_field == '#sms_cron_month' || cron_field == '#sms_cron_day') && $(cron_field).val() == '') {
+                $(cron_field).val('1');
+                }
+                if ((cron_field == '#sms_cron_week' || cron_field == '#sms_cron_day_of_week') && $(cron_field).val() == '') {
+                $(cron_field).val('*');
+                }
+
+            });
+
+        cron_fields_to_validate.slice(index_of_least_significant_explicitly_defined_field+1).forEach(function (cron_field, i) {
+        console.log('%d: %s: %s', i, cron_field, $(cron_field).val());
+        if($(cron_field).val() == '')
+        {
+             $(cron_field).val('*');
+        }
+            });
+
+        //for testing
+           var print_alert = "";
+        cron_fields_to_validate.forEach(function (cron_field, i) {
+            print_alert = print_alert + " " + cron_field + ": " + $(cron_field).val() + "\n"
+        });
+        console.log(print_alert);
+
+        for (var cron_field of cron_fields_to_validate)
+             {
+                 let isNumber = /^\d+$/.test($(cron_field).val());
+
+                 if ($(cron_field).val() != "*") {
+                      if (!isNumber ) {
+                          submitForm = false;
+                          $(cron_field).attr('style', "border-radius: 5px; border:#FF0000 1px solid;");
+                          $(cron_field).css("border", "1px solid red");
+                      }
+                      else{
+                          if (cron_field == '#sms_cron_second'  && (Number($(cron_field).val()) < 0 || Number($(cron_field).val()) > 59)) {
+                            submitForm = false;
+                            $(cron_field).attr('style', "border-radius: 5px; border:#FF0000 1px solid;");
+                            $(cron_field).css("border", "1px solid red");
+                            }
+                          if (cron_field == '#sms_cron_minute'  && (Number($(cron_field).val()) < 0 || Number($(cron_field).val()) > 59)) {
+                            submitForm = false;
+                            $(cron_field).attr('style', "border-radius: 5px; border:#FF0000 1px solid;");
+                            $(cron_field).css("border", "1px solid red");
+                            }
+                          if (cron_field == '#sms_cron_hour'  && (Number($(cron_field).val()) < 0 || Number($(cron_field).val()) > 23)) {
+                            submitForm = false;
+                            $(cron_field).attr('style', "border-radius: 5px; border:#FF0000 1px solid;");
+                            $(cron_field).css("border", "1px solid red");
+                            }
+                          if (cron_field == '#sms_cron_week'  && (Number($(cron_field).val()) < 1 || Number($(cron_field).val()) > 53)) {
+                            submitForm = false;
+                            $(cron_field).attr('style', "border-radius: 5px; border:#FF0000 1px solid;");
+                            $(cron_field).css("border", "1px solid red");
+                            }
+                          if (cron_field == '#sms_cron_day'  && (Number($(cron_field).val()) < 1 || Number($(cron_field).val()) > 31)) {
+                            submitForm = false;
+                            $(cron_field).attr('style', "border-radius: 5px; border:#FF0000 1px solid;");
+                            $(cron_field).css("border", "1px solid red");
+                            }
+                          if (cron_field == '#sms_cron_month'  && (Number($(cron_field).val()) < 1 || Number($(cron_field).val()) > 12)) {
+                            submitForm = false;
+                            $(cron_field).attr('style', "border-radius: 5px; border:#FF0000 1px solid;");
+                            $(cron_field).css("border", "1px solid red");
+                            }
+
+                          if (cron_field == '#sms_cron_year'  && Number($(cron_field).val()) < 2022 ) {
+                            submitForm = false;
+                            $(cron_field).attr('style', "border-radius: 5px; border:#FF0000 1px solid;");
+                            $(cron_field).css("border", "1px solid red");
+                            }
+                      }
+                 }
+             }
+
+             if(!submitForm)
+             {
+                 event.preventDefault();
+                event.stopPropagation();
+             }
+        }
+
+       $('#createMessageJobsButton,#modifyMessageJobsButton').on('click', function(event) {
 
            if ($("#disableSMSMessage").is(':checked') && $("#disableEmailMessage").is(':checked'))
            {
@@ -624,10 +858,21 @@ emailRecipientCounter = Number(emailRecipientCounter) + 1;
                alert("You must enable an sms or email message!");
            }
 
+            if (!$("#disableSMSMessage").is(':checked'))
+            {
+                 validateSMSCronInputsAndSetDefaults();
+            }
+
+            if (!$("#disableEmailMessage").is(':checked'))
+            {
+                 validateEmailCronInputsAndSetDefaults();
+            }
+
             });
 
 
        window.onload = function(){
+
 
         var offset = -5;
            var todayCST = new Date(new Date().getTime() + offset * 3600 * 1000).toISOString();//.split('T')[0];

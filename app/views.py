@@ -294,7 +294,6 @@ def create_job(job_id, job_medium_being_modified, status_of_job_being_modified):
                     email_messages_to_setup['email_job_parameters'] = {'run_date': datetime.datetime.strptime(create_job_request_dict['email_run_date_and_time'], '%Y-%m-%dT%H:%M')}
                     email_messages_to_setup['email_job_type'] = 'email_date_trigger'
                 elif create_job_request_dict['emailJobType'] == 'emailCronJob':
-                    # TODO require all fields for cron (and maybe interval) on front end so you dont have to deal with intricacies of APScheduler default
                     email_messages_to_setup['email_job_parameters'] = {'year': create_job_request_dict['email_cron_year'],
                                                                    'month': create_job_request_dict['email_cron_month'],
                                                                    'day': create_job_request_dict['email_cron_day'],
@@ -308,7 +307,6 @@ def create_job(job_id, job_medium_being_modified, status_of_job_being_modified):
                                                                    }
                     email_messages_to_setup['email_job_type'] = 'email_cron_trigger'
                 elif create_job_request_dict['emailJobType'] == 'emailIntervalJob':
-                    # TODO require all fields for cron (and maybe interval) on front end so you dont have to deal with intricacies of APScheduler default
                     email_messages_to_setup['email_job_parameters'] = {'days': int(create_job_request_dict['email_interval_days']),
                                                                    'weeks': int(create_job_request_dict['email_interval_weeks']),
                                                                    'hours': int(create_job_request_dict['email_interval_hours']),
