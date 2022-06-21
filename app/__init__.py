@@ -7,6 +7,8 @@ from sqlalchemy import MetaData
 
 metadata = MetaData()
 
+print("testing Config contents")
+print(dir(Config()))
 
 server = Flask(__name__)
 server.config.from_object(Config)
