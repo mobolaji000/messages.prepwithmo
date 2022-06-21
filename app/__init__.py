@@ -18,8 +18,6 @@ from apscheduler.schedulers.background import BackgroundScheduler
 Config.scheduler = BackgroundScheduler(jobstores=Config.jobstores, executors=Config.executors, job_defaults=Config.job_defaults, timezone='US/Central')
 Config.scheduler.start()
 
-print("testing Config contents")
-print(dir(Config()))
 
 server = Flask(__name__)
 server.config.from_object(Config)

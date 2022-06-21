@@ -88,18 +88,9 @@ class Config(object):
             Google_Drive_Email_Attachment_Folder = '14dATc_XlxaqktxDXkIhk8s2KpnMyH5JQ'
             Google_Drive_SMS_Attachment_Folder = '1wOLeYUMJFAuzOxw0BjG2YQnZ7HBHsUZg'
 
-            jobstores = {
-                # 'mongo': SQLAlchemyJobStore(),
-                'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
-            }
-            executors = {
-                # 'default': ThreadPoolExecutor(20),
-                'processpool': ProcessPoolExecutor(5)
-            }
-            job_defaults = {
-                # 'coalesce': False,
-                # 'max_instances': 3
-            }
+            jobstores = {'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)}
+            executors = {'processpool': ProcessPoolExecutor(5)}
+            job_defaults = {}
 
 
         elif os.environ['DEPLOY_REGION'] == 'prod':
