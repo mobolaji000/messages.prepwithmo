@@ -546,8 +546,8 @@ def start_background_jobs_before_first_request():
     # print("3. ",datetime.datetime.today())
     # print("4. ",datetime.datetime.fromtimestamp(int(time.mktime(datetime.datetime.today().timetuple()))))
 
-    print('scheduelr is startiung')
-    Config.scheduler.start()
+print('scheduelr is startiung')
+Config.scheduler.start()
 
 
 
