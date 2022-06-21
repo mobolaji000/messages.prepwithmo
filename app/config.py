@@ -17,8 +17,6 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 
-
-
 class Config(object):
     try:
         if os.environ['DEPLOY_REGION'] == 'local':
