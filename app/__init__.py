@@ -7,8 +7,10 @@ from sqlalchemy import MetaData
 
 metadata = MetaData()
 
-print("testing Config contents")
-print(dir(Config()))
+# print("testing Config contents")
+# print(dir(Config()))
+# print('scheduelr is startiung')
+# Config.scheduler.start()
 
 server = Flask(__name__)
 server.config.from_object(Config)
