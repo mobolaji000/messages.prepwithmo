@@ -8,12 +8,22 @@ from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 from apscheduler.schedulers.background import BackgroundScheduler
 
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+handler = logging.StreamHandler()
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+
 
 
 
 class Config(object):
     try:
         if os.environ['DEPLOY_REGION'] == 'local':
+
+            logger.debug("Environment is local")
 
             os.environ["url_to_start_reminder"] = "http://127.0.0.1:5003/"
             flask_secret_key = os.environ.get('flask_secret_key')
@@ -61,6 +71,8 @@ class Config(object):
 
         elif os.environ['DEPLOY_REGION'] == 'dev':
 
+            logger.debug("Environment is dev")
+
             os.environ["url_to_start_reminder"] = "https://dev-pay-perfectscoremo-7stpz.ondigitalocean.app/"
             flask_secret_key = awsInstance.get_secret("vensti_admin", "flask_secret_key")
             SECRET_KEY = awsInstance.get_secret("vensti_admin", "flask_secret_key")
@@ -97,6 +109,7 @@ class Config(object):
 
         elif os.environ['DEPLOY_REGION'] == 'prod':
 
+            logger.debug("Environment is prod")
 
             os.environ["url_to_start_reminder"] = "https://pay.perfectscoremo.com/"
             flask_secret_key = awsInstance.get_secret("vensti_admin", "flask_secret_key")
