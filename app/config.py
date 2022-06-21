@@ -30,7 +30,7 @@ class Config(object):
 
             twilioClient = TwilioClient(twilio_account_sid, twilio_auth_token)
 
-            MAX_CONTENT_LENGT = 1024 * 1024
+            MAX_CONTENT_LENGTH = 1024 * 1024
             UPLOAD_EXTENSIONS = ['.jpg', '.png', '.gif', '.jpeg', '.pdf', '.txt', '.doc', '.docx', '.xlsx', '.xls', '.tiff']
             UPLOAD_PATH = '/app/data/uploads'
 
@@ -42,6 +42,20 @@ class Config(object):
 
             Google_Drive_Email_Attachment_Folder = '14dATc_XlxaqktxDXkIhk8s2KpnMyH5JQ'
             Google_Drive_SMS_Attachment_Folder = '1wOLeYUMJFAuzOxw0BjG2YQnZ7HBHsUZg'
+
+            jobstores = {
+                # 'mongo': SQLAlchemyJobStore(),
+                'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
+            }
+            executors = {
+                # 'default': ThreadPoolExecutor(20),
+                'processpool': ProcessPoolExecutor(5)
+            }
+            job_defaults = {
+                # 'coalesce': False,
+                # 'max_instances': 3
+            }
+            scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone='US/Central')
 
 
 
@@ -59,12 +73,26 @@ class Config(object):
             twilio_auth_token = awsInstance.get_secret("twilio_cred", "TWILIO_AUTH_TOKEN")
             twilioClient = TwilioClient(twilio_account_sid, twilio_auth_token)
 
-            MAX_CONTENT_LENGT = 1024 * 1024
+            MAX_CONTENT_LENGTH = 1024 * 1024
             UPLOAD_EXTENSIONS = ['.jpg', '.png', '.gif']
             UPLOAD_PATH = '/app/data/uploads'
 
-            #os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-            #TODO put google crewdentials in Digigtal Ocean environment variables and encryt it for dev and prod
+            Google_Drive_Email_Attachment_Folder = '14dATc_XlxaqktxDXkIhk8s2KpnMyH5JQ'
+            Google_Drive_SMS_Attachment_Folder = '1wOLeYUMJFAuzOxw0BjG2YQnZ7HBHsUZg'
+
+            jobstores = {
+                # 'mongo': SQLAlchemyJobStore(),
+                'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
+            }
+            executors = {
+                # 'default': ThreadPoolExecutor(20),
+                'processpool': ProcessPoolExecutor(5)
+            }
+            job_defaults = {
+                # 'coalesce': False,
+                # 'max_instances': 3
+            }
+            scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone='US/Central')
 
 
         elif os.environ['DEPLOY_REGION'] == 'prod':
@@ -82,25 +110,13 @@ class Config(object):
             twilio_auth_token = awsInstance.get_secret("twilio_cred", "TWILIO_AUTH_TOKEN")
             twilioClient = TwilioClient(twilio_account_sid, twilio_auth_token)
 
-            MAX_CONTENT_LENGT = 1024 * 1024
+            MAX_CONTENT_LENGTH = 1024 * 1024
             UPLOAD_EXTENSIONS = ['.jpg', '.png', '.gif']
             UPLOAD_PATH = '/app/data/uploads'
 
             #os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
-        jobstores = {
-            # 'mongo': SQLAlchemyJobStore(),
-            'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
-        }
-        executors = {
-            # 'default': ThreadPoolExecutor(20),
-            'processpool': ProcessPoolExecutor(5)
-        }
-        job_defaults = {
-            # 'coalesce': False,
-            # 'max_instances': 3
-        }
-        scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone='US/Central')
+
 
 
 
