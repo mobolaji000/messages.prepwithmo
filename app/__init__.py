@@ -7,14 +7,16 @@ from sqlalchemy import MetaData
 
 metadata = MetaData()
 
-# print('scheduelr is startiung')
 # if not Config.scheduler.running:
 #     Config.scheduler.start()
 
 # print("testing Config contents")
 # print(dir(Config()))
-# print('scheduelr is startiung')
-# Config.scheduler.start()
+
+
+from apscheduler.schedulers.background import BackgroundScheduler
+Config.scheduler = BackgroundScheduler(jobstores=Config.jobstores, executors=Config.executors, job_defaults=Config.job_defaults, timezone='US/Central')
+Config.scheduler.start()
 
 server = Flask(__name__)
 server.config.from_object(Config)

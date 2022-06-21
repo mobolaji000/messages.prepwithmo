@@ -63,9 +63,6 @@ class Config(object):
                 # 'coalesce': False,
                 # 'max_instances': 3
             }
-            scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone='US/Central')
-
-
 
 
         elif os.environ['DEPLOY_REGION'] == 'dev':
@@ -102,13 +99,7 @@ class Config(object):
             job_defaults = {
                 # 'coalesce': False,
                 # 'max_instances': 3
-            }#
-
-            scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone='US/Central')
-            #scheduler.start()
-
-
-
+            }
 
 
         elif os.environ['DEPLOY_REGION'] == 'prod':

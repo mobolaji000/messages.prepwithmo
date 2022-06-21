@@ -1,8 +1,10 @@
+from app.config import Config
 from flask import render_template, flash, session, redirect, url_for, request, jsonify, send_file, Response
 from werkzeug.urls import url_parse
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from app.config import Config
+
+
 from app.service import ValidateLogin
 from app.service import User
 from flask_login import login_user,login_required,current_user,logout_user
@@ -536,7 +538,7 @@ def start_background_jobs_before_first_request():
     else:
         Config.scheduler.add_job(default_background_job, 'cron', hour='21', minute='00')
 
-    Config.scheduler.start()
+    #Config.scheduler.start()
 
 
 
