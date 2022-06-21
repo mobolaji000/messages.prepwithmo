@@ -7,6 +7,10 @@ from sqlalchemy import MetaData
 
 metadata = MetaData()
 
+print('scheduelr is startiung')
+if not Config.scheduler.running:
+    Config.scheduler.start()
+
 # print("testing Config contents")
 # print(dir(Config()))
 # print('scheduelr is startiung')
