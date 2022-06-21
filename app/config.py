@@ -104,7 +104,7 @@ class Config(object):
             }
             scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone='US/Central')
 
-            scheduler.start()
+
 
 
 

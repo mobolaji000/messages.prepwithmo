@@ -3,6 +3,7 @@ from werkzeug.urls import url_parse
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from app.config import Config
+Config.scheduler.start()
 from app.service import ValidateLogin
 from app.service import User
 from flask_login import login_user,login_required,current_user,logout_user
