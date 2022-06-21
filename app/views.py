@@ -532,6 +532,7 @@ def start_background_jobs_before_first_request():
         pass
         #scheduler.add_job(dummy_background_job, 'cron', minute='55')
         #print("Default background job added")
+        Config.scheduler.add_job(default_background_job, 'cron', hour='21', minute='00')
     else:
         Config.scheduler.add_job(default_background_job, 'cron', hour='21', minute='00')
 
