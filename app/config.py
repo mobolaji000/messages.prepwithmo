@@ -72,7 +72,7 @@ class Config(object):
 
             logger.debug("Environment is dev")
 
-            os.environ["url_to_start_reminder"] = "https://dev-pay-perfectscoremo-7stpz.ondigitalocean.app/"
+            os.environ["url_to_start_reminder"] = "https://dev-messages-prepwithmo-hnhgb.ondigitalocean.app/"
             flask_secret_key = awsInstance.get_secret("vensti_admin", "flask_secret_key")
             SECRET_KEY = awsInstance.get_secret("vensti_admin", "flask_secret_key")
             dbUserName = awsInstance.get_secret("do_db_cred", "dev_username")
@@ -105,7 +105,7 @@ class Config(object):
             }#
 
             scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone='US/Central')
-            scheduler.start()
+            #scheduler.start()
 
 
 
