@@ -15,9 +15,9 @@ server.config.from_object(Config)
 
 db = SQLAlchemy(server,engine_options={"pool_pre_ping": True},session_options={'expire_on_commit': False},metadata=metadata)
 
-
-# Base = automap_base()
-# Base.prepare(db.engine, reflect=True)
+from sqlalchemy.ext.automap import automap_base
+Base = automap_base()
+Base.prepare(db.engine, reflect=True)
 
 from app import views, models
 migrate = Migrate(server, db)
