@@ -10,17 +10,19 @@ metadata = MetaData()
 # if not Config.scheduler.running:
 #     Config.scheduler.start()#
 
-print("testing Config contents")
-print(Config.__dict__)
-
-
-from apscheduler.schedulers.background import BackgroundScheduler
-Config.scheduler = BackgroundScheduler(jobstores=Config.jobstores, executors=Config.executors, job_defaults=Config.job_defaults, timezone='US/Central')
-Config.scheduler.start()
 
 
 server = Flask(__name__)
 server.config.from_object(Config)
+
+
+from apscheduler.schedulers.background import BackgroundScheduler
+print()
+Config.scheduler = BackgroundScheduler(jobstores=Config.jobstores, executors=Config.executors, job_defaults=Config.job_defaults, timezone='US/Central')
+Config.scheduler.start()
+
+print("testing Config contents")
+print(Config.__dict__)
 
 db = SQLAlchemy(server,engine_options={"pool_pre_ping": True},session_options={'expire_on_commit': False},metadata=metadata)
 
