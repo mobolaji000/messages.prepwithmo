@@ -64,18 +64,6 @@ class Config(object):
                 # 'max_instances': 3
             }
 
-            JOBSTORES = {
-                # 'mongo': SQLAlchemyJobStore(),
-                'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
-            }
-            EXECUTORS = {
-                # 'default': ThreadPoolExecutor(20),
-                'processpool': ProcessPoolExecutor(5)
-            }
-            JOB_DEFAULTS = {
-                # 'coalesce': False,
-                # 'max_instances': 3
-            }
 
 
         elif os.environ['DEPLOY_REGION'] == 'dev':
@@ -93,6 +81,19 @@ class Config(object):
             job_defaults = {}
             executors = {'processpool': ProcessPoolExecutor(5)}
             jobstores = {'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)}
+
+            JOBSTORES = {
+                # 'mongo': SQLAlchemyJobStore(),
+                'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
+            }
+            EXECUTORS = {
+                # 'default': ThreadPoolExecutor(20),
+                'processpool': ProcessPoolExecutor(5)
+            }
+            JOB_DEFAULTS = {
+                # 'coalesce': False,
+                # 'max_instances': 3
+            }
 
             twilio_account_sid = awsInstance.get_secret("twilio_cred", "TWILIO_ACCOUNT_SID")
             twilio_auth_token = awsInstance.get_secret("twilio_cred", "TWILIO_AUTH_TOKEN")
