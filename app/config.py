@@ -77,6 +77,10 @@ class Config():
             SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://'+str(dbUserName)+':'+str(dbPassword)+'@app-27fee962-3fa3-41cb-aecc-35d29dbd568e-do-user-9096158-0.b.db.ondigitalocean.com:25060/db'
             SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+            job_defaults = {}
+            executors = {'processpool': ProcessPoolExecutor(5)}
+            jobstores = {'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)}
+
             twilio_account_sid = awsInstance.get_secret("twilio_cred", "TWILIO_ACCOUNT_SID")
             twilio_auth_token = awsInstance.get_secret("twilio_cred", "TWILIO_AUTH_TOKEN")
             twilioClient = TwilioClient(twilio_account_sid, twilio_auth_token)
@@ -93,11 +97,6 @@ class Config():
 
             Google_Drive_Email_Attachment_Folder = '14dATc_XlxaqktxDXkIhk8s2KpnMyH5JQ'
             Google_Drive_SMS_Attachment_Folder = '1wOLeYUMJFAuzOxw0BjG2YQnZ7HBHsUZg'
-
-            job_defaults = {}
-            executors = {'processpool': ProcessPoolExecutor(5)}
-            jobstores = {'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)}
-
 
 
 
