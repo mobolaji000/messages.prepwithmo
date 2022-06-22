@@ -64,6 +64,19 @@ class Config(object):
                 # 'max_instances': 3
             }
 
+            JOBSTORES = {
+                # 'mongo': SQLAlchemyJobStore(),
+                'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
+            }
+            EXECUTORS = {
+                # 'default': ThreadPoolExecutor(20),
+                'processpool': ProcessPoolExecutor(5)
+            }
+            JOB_DEFAULTS = {
+                # 'coalesce': False,
+                # 'max_instances': 3
+            }
+
 
         elif os.environ['DEPLOY_REGION'] == 'dev':
 
