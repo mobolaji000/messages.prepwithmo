@@ -1,5 +1,5 @@
 # set base image (host OS)
-FROM tiangolo/uwsgi-nginx-flask:python3.8
+FROM tiangolo/uwsgi-nginx-flask:python3.7
 
 
 # set the working directory in the container
