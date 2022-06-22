@@ -538,7 +538,7 @@ def start_background_jobs_before_first_request():
     else:
         Config.scheduler.add_job(default_background_job, 'cron', hour='21', minute='00')
 
-    #Config.scheduler.start()
+    Config.scheduler.start()
 
 
 
