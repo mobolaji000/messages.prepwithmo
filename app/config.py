@@ -6,7 +6,7 @@ awsInstance = AWSInstance()
 
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
-from apscheduler.schedulers.background import BackgroundScheduler
+import traceback
 
 import logging
 logger = logging.getLogger(__name__)
@@ -143,5 +143,6 @@ class Config(object):
     except Exception as e:
         print("error in initialization")
         print(e)
+        traceback.print_exc()
         #trigger11
 
