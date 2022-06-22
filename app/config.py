@@ -58,7 +58,7 @@ class Config(object):
                 'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
             }
             executors = {
-                'default': ThreadPoolExecutor(20),
+                'default': ThreadPoolExecutor(2),
                 # 'processpool': ProcessPoolExecutor(5)
             }
             job_defaults = {
@@ -105,7 +105,7 @@ class Config(object):
                 'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
             }
             executors = {
-                'default': ThreadPoolExecutor(20),
+                'default': ThreadPoolExecutor(2),
                 # 'processpool': ProcessPoolExecutor(5)
             }
             job_defaults = {
@@ -147,7 +147,7 @@ class Config(object):
                 'default': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URI)
             }
             executors = {
-                'default': ThreadPoolExecutor(20),
+                'default': ThreadPoolExecutor(2),
                 # 'processpool': ProcessPoolExecutor(5)
             }
             job_defaults = {
