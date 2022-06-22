@@ -85,6 +85,12 @@ class Config(object):
             UPLOAD_EXTENSIONS = ['.jpg', '.png', '.gif']
             UPLOAD_PATH = '/app/data/uploads'
 
+            SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly', 'https://www.googleapis.com/auth/drive.file']
+            CLIENT_SECRETS_FILE = '/app/data/credentials.json'
+
+            os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+            os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
+
             Google_Drive_Email_Attachment_Folder = '14dATc_XlxaqktxDXkIhk8s2KpnMyH5JQ'
             Google_Drive_SMS_Attachment_Folder = '1wOLeYUMJFAuzOxw0BjG2YQnZ7HBHsUZg'
 
