@@ -11,7 +11,7 @@ metadata = MetaData()
 #     Config.scheduler.start()
 
 print("testing Config contents")
-print(dir(Config()))
+print(Config.__dict__)
 
 
 from apscheduler.schedulers.background import BackgroundScheduler
