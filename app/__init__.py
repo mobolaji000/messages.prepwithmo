@@ -8,7 +8,7 @@ from sqlalchemy import MetaData
 metadata = MetaData()
 
 # if not Config.scheduler.running:
-#     Config.scheduler.start()
+#     Config.scheduler.start()#
 
 print("testing Config contents")
 print(Config.__dict__)
