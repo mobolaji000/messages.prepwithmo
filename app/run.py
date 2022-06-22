@@ -13,7 +13,7 @@ def start_runner():
             try:
                 url_to_start_reminder = os.environ.get("url_to_start_reminder")
                 r = requests.get(url_to_start_reminder)
-                if r.status_code != 500:
+                if r.status_code != 500 and r.status_code != 504:
                     print('Server started, quiting start_loop')
                     not_started = False
                 print(r.status_code)
@@ -21,7 +21,7 @@ def start_runner():
                 #print(e)
                 #traceback.print_exc()
                 print('Server not yet started')
-            time.sleep(2)
+            time.sleep(5)
 
     print('Started runner')
     thread = threading.Thread(target=start_loop)
