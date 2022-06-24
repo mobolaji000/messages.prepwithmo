@@ -27,4 +27,5 @@ ENV FLASK_APP=run
 ENV DEPLOY_REGION=prod
 
 #CMD  flask db init && flask db stamp head && flask db migrate -m "Initial migration." && python3 -m flask db upgrade && python3 -m flask run --host=0.0.0.0
-CMD python3 -m flask run --host=0.0.0.0
+CMD touch /app/data/credentials.json && echo $GOOGLE_CREDENTIALS_JSON > /app/data/credentials.json  && python3 -m flask run --host=0.0.0.0  --port=5003
+
