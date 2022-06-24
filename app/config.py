@@ -140,6 +140,8 @@ class Config(object):
             UPLOAD_EXTENSIONS = ['.jpg', '.png', '.gif']
             UPLOAD_PATH = '/app/data/uploads'
 
+            CLIENT_SECRETS_FILE = '/app/data/credentials.json'
+
             #os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
             jobstores = {
