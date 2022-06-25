@@ -57,7 +57,7 @@ class AppDBUtil():
 
     @classmethod
     def getGoogleCredentials(cls):
-        credentials = db.session.query(GoogleCredentials).filter(GoogleCredentials.credential_id == 5).order_by(GoogleCredentials.credential_id.desc()).first()
+        credentials = db.session.query(GoogleCredentials).order_by(GoogleCredentials.credential_id.desc()).first()
         return credentials
 
     @classmethod
