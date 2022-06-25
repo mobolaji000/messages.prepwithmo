@@ -30,7 +30,7 @@ ENV DEPLOY_REGION=prod
 
 RUN mkdir -p /app/data/
 RUN touch /app/data/credentials.json
-RUN echo $GOOGLE_CREDENTIALS_JSON > /app/data/credentials.json
+RUN echo ${GOOGLE_CREDENTIALS_JSON} > /app/data/credentials.json
 CMD python3 -m flask run --host=0.0.0.0  --port=5003
 
 #CMD touch /app/data/credentials.json && echo $GOOGLE_CREDENTIALS_JSON > /app/data/credentials.json  && python3 -m flask run --host=0.0.0.0  --port=5003
