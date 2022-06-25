@@ -465,6 +465,8 @@ def authorize():
         return redirect(authorization_url)
     except Exception as e:
         traceback.print_exc()
+    finally:
+        return ''
 
 @server.route('/oauth2callback')
 def oauth2callback():
