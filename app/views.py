@@ -481,35 +481,40 @@ def authorize():
 
 @server.route('/oauth2callback')
 def oauth2callback():
-    # if request.url.startswith('http://'):
-    #     url = request.url.replace('http://', 'https://', 1)
-    #     code = 301
-    #     return redirect(url, code=code)
+    try:
+        # if request.url.startswith('http://'):
+        #     url = request.url.replace('http://', 'https://', 1)
+        #     code = 301
+        #     return redirect(url, code=code)
 
-    # Specify the state when creating the flow in the callback so that it can
-    # verified in the authorization server response.
-    state = session['state']
-    print("state is ", state)
+        # Specify the state when creating the flow in the callback so that it can
+        # verified in the authorization server response.
+        state = session['state']
+        print("state is ", state)
 
-    flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-        Config.CLIENT_SECRETS_FILE, scopes=Config.SCOPES, state=state)
-    flow.redirect_uri = url_for('oauth2callback', _external=True)
+        flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
+            Config.CLIENT_SECRETS_FILE, scopes=Config.SCOPES, state=state)
+        flow.redirect_uri = url_for('oauth2callback', _external=True)
 
-    # Use the authorization server's response to fetch the OAuth 2.0 tokens.
-    print("request url is:",request.url)
-    authorization_response = request.url.replace('http://', 'https://', 1)
-    print("authorization_response is:", authorization_response)
-    flow.fetch_token(authorization_response=authorization_response)
+        # Use the authorization server's response to fetch the OAuth 2.0 tokens.
+        print("request url is:",request.url)
+        authorization_response = request.url.replace('http://', 'https://', 1)
+        print("authorization_response is:", authorization_response)
+        flow.fetch_token(authorization_response=authorization_response)
 
-    # Store credentials in the session.
-    # ACTION ITEM: In a production app, you likely want to save these
-    #              credentials in a persistent database instead.
-    credentials = flow.credentials
-    AppDBUtil.setGoogleCredentials(credentials)
+        # Store credentials in the session.
+        # ACTION ITEM: In a production app, you likely want to save these
+        #              credentials in a persistent database instead.
+        credentials = flow.credentials
+        AppDBUtil.setGoogleCredentials(credentials)
 
-    #session['credentials'] = AccessGoogleAPI.credentials_to_dict(credentials)
+        #session['credentials'] = AccessGoogleAPI.credentials_to_dict(credentials)
+        return redirect(url_for('create_job'))
+    except Exception as e:
+        traceback.print_exc()
 
-    return redirect(url_for('create_job'))
+
+
 
 
 
