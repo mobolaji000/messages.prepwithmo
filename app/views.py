@@ -512,6 +512,7 @@ def oauth2callback():
         return redirect(url_for('create_job'))
     except Exception as e:
         traceback.print_exc()
+        return redirect(url_for('create_job'))
 
 
 
