@@ -478,7 +478,7 @@ def authorize():
         traceback.print_exc()
         authorization_url = ''
     finally:
-        authorization_url = authorization_url.replace('http://', 'https://', 1)
+        #authorization_url = authorization_url.replace('http://', 'https://', 1)
         return redirect(authorization_url)
 
 @server.route('/oauth2callback')
@@ -499,7 +499,7 @@ def oauth2callback():
 
     # Use the authorization server's response to fetch the OAuth 2.0 tokens.
     print("request url is:",request.url)
-    authorization_response = request.url.replace('http://', 'https://', 1)
+    authorization_response = request.url.replace('https://', 'http://', 1)
     print("authorization_response is:", authorization_response)
     flow.fetch_token(authorization_response=authorization_response)
 
