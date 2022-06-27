@@ -497,7 +497,7 @@ def oauth2callback():
     flow.redirect_uri = url_for('oauth2callback', _external=True)
 
     # Use the authorization server's response to fetch the OAuth 2.0 tokens.
-    authorization_response = request.url
+    authorization_response = request.url.replace('http://', 'https://', 1)
     flow.fetch_token(authorization_response=authorization_response)
 
     # Store credentials in the session.
