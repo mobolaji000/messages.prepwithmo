@@ -478,6 +478,7 @@ def authorize():
         traceback.print_exc()
         authorization_url = ''
     finally:
+        authorization_url = authorization_url.replace('http://', 'https://', 1)
         return redirect(authorization_url.replace('http://', 'https://', 1))
 
 @server.route('/oauth2callback')
