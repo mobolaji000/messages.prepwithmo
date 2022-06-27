@@ -455,7 +455,7 @@ def authorize():
         # error.
         #flow.redirect_uri = url_for('oauth2callback', _external=True)
 
-        flow.redirect_uri = url_for('oauth2callback', _external=True)#.replace('http://', 'https://', 1)
+        flow.redirect_uri = url_for('oauth2callback', _external=True).replace('http://', 'https://', 1)
         print(flow.redirect_uri)
 
         print(flow.redirect_uri)
@@ -497,7 +497,9 @@ def oauth2callback():
     flow.redirect_uri = url_for('oauth2callback', _external=True)
 
     # Use the authorization server's response to fetch the OAuth 2.0 tokens.
-    authorization_response = request.url#.replace('http://', 'https://', 1)
+    print("request url is:",request.url)
+    authorization_response = request.url.replace('http://', 'https://', 1)
+    print("authorization_response is:", authorization_response)
     flow.fetch_token(authorization_response=authorization_response)
 
     # Store credentials in the session.
