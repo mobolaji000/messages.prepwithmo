@@ -95,7 +95,7 @@ class Config(object):
             CLIENT_SECRETS_FILE = '/app/data/credentials.json'
 
             os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-            # os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
+            os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
 
             Google_Drive_Email_Attachment_Folder = '14dATc_XlxaqktxDXkIhk8s2KpnMyH5JQ'
             Google_Drive_SMS_Attachment_Folder = '1wOLeYUMJFAuzOxw0BjG2YQnZ7HBHsUZg'
