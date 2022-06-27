@@ -50,8 +50,6 @@ db = SQLAlchemy(server)
 migrate = Migrate(server, db)
 awsInstance = AWSInstance()
 
-import ssl
-ssl._create_default_https_context =  ssl._create_unverified_context
 
 
 @server.route("/")
@@ -477,10 +475,19 @@ def authorize():
         traceback.print_exc()
         authorization_url = ''
     finally:
+        authorization_url = authorization_url.replace('http://', 'https://', 1)
+        code = 301
+        return redirect(authorization_url, code=code)
+
         return redirect(authorization_url)
 
 @server.route('/oauth2callback')
 def oauth2callback():
+    # if request.url.startswith('http://'):
+    #     url = request.url.replace('http://', 'https://', 1)
+    #     code = 301
+    #     return redirect(url, code=code)
+
     # Specify the state when creating the flow in the callback so that it can
     # verified in the authorization server response.
     state = session['state']
