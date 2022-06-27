@@ -458,8 +458,6 @@ def authorize():
         flow.redirect_uri = url_for('oauth2callback', _external=True).replace('http://', 'https://', 1)
         print(flow.redirect_uri)
 
-        print(flow.redirect_uri)
-
         authorization_url, state = flow.authorization_url(
             # Enable offline access so that you can refresh an access token without
             # re-prompting the user for permission. Recommended for web server apps.
@@ -467,7 +465,9 @@ def authorize():
             # Enable incremental authorization. Recommended as a best practice.
             include_granted_scopes='true')
 
+        print("authorization_url is ", state)
         print(authorization_url)
+        print("state is ", state)
         print(state)
 
         # Store the state so the callback can verify the auth server response.
@@ -479,7 +479,7 @@ def authorize():
         authorization_url = ''
     finally:
         authorization_url = authorization_url.replace('http://', 'https://', 1)
-        return redirect(authorization_url.replace('http://', 'https://', 1))
+        return redirect(authorization_url)
 
 @server.route('/oauth2callback')
 def oauth2callback():
