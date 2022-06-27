@@ -453,7 +453,10 @@ def authorize():
         # for the OAuth 2.0 client, which you configured in the API Console. If this
         # value doesn't match an authorized URI, you will get a 'redirect_uri_mismatch'
         # error.
-        flow.redirect_uri = url_for('oauth2callback', _external=True)
+        #flow.redirect_uri = url_for('oauth2callback', _external=True)
+
+        flow.redirect_uri = url_for('oauth2callback', _external=True).replace('http://', 'https://', 1)
+        print(flow.redirect_uri)
 
         print(flow.redirect_uri)
 
@@ -475,10 +478,6 @@ def authorize():
         traceback.print_exc()
         authorization_url = ''
     finally:
-        authorization_url = authorization_url.replace('http://', 'https://', 1)
-        code = 301
-        return redirect(authorization_url, code=code)
-
         return redirect(authorization_url)
 
 @server.route('/oauth2callback')
