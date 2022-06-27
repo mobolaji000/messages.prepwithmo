@@ -465,10 +465,8 @@ def authorize():
             # Enable incremental authorization. Recommended as a best practice.
             include_granted_scopes='true')
 
-        print("authorization_url is ", state)
-        print(authorization_url)
+        print("authorization_url is ", authorization_url)
         print("state is ", state)
-        print(state)
 
         # Store the state so the callback can verify the auth server response.
         session['state'] = state
@@ -499,7 +497,7 @@ def oauth2callback():
 
     # Use the authorization server's response to fetch the OAuth 2.0 tokens.
     print("request url is:",request.url)
-    authorization_response = request.url.replace('https://', 'http://', 1)
+    authorization_response = request.url.replace('http://', 'https://', 1)
     print("authorization_response is:", authorization_response)
     flow.fetch_token(authorization_response=authorization_response)
 
