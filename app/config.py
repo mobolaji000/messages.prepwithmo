@@ -124,7 +124,7 @@ class Config(object):
 
             logger.debug("Environment is prod")
 
-            os.environ["url_to_start_reminder"] = "https://messages-prepwithmo-i2tlc.ondigitalocean.app/"
+            os.environ["url_to_start_reminder"] = "https://messages.prepwithmo.com/"
             flask_secret_key = awsInstance.get_secret("vensti_admin", "flask_secret_key")
             SECRET_KEY = awsInstance.get_secret("vensti_admin", "flask_secret_key")
             dbUserName = awsInstance.get_secret("do_db_cred", "username")
