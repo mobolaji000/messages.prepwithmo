@@ -79,14 +79,14 @@ class Lead(db.Model):
         return '<Lead created with lead_id {}>'.format(self.lead_id)
 
 
-# class ApSchedulerJobs(db.Model):
-#
-#     __tablename__ = 'apscheduler_jobs'
-#     __table_args__ = {'autoload': True, 'autoload_with': db.engine}
-#
-#
-#     def __repr__(self):
-#         return '<Job {} created is: >'.format(self.job_state)
+class ApSchedulerJobs(db.Model):
+
+    __tablename__ = 'apscheduler_jobs'
+    __table_args__ = {'autoload': True, 'autoload_with': db.engine}
+
+
+    def __repr__(self):
+        return '<Job {} created is: >'.format(self.job_state)
 
 class Tutor(db.Model):
 

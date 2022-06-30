@@ -2,7 +2,7 @@ import datetime
 import pytz
 from app import db
 
-from app.models import Recipient,Student, Tutor, Lead,  GoogleCredentials,ApSchedulerJobsFurtherState
+from app.models import Recipient,Student, Tutor, Lead, ApSchedulerJobs, GoogleCredentials,ApSchedulerJobsFurtherState
 import pandas
 from sqlalchemy import select
 import logging
@@ -29,9 +29,8 @@ class AppDBUtil():
         recipients = Recipient.__table__.delete()
         db.session.execute(recipients)
 
-        # jobs = ApSchedulerJobs.__table__.delete()
-        # db.session.execute(jobs)
-        #cls.executeDBQuery()
+        jobs = ApSchedulerJobs.__table__.delete()
+        db.session.execute(jobs)
 
         statement = Student(student_id='s-130860', prospect_id='p-130860', student_first_name='Student_1', student_last_name='One', student_phone_number='6172917242', student_email='mo@vensti.com',
                                            parent_1_salutation='Mr.', parent_1_first_name='Father_1', parent_1_last_name='One', parent_1_phone_number='4104280093', parent_1_email='mobolaji.akinpelu@yahoo.com',
@@ -111,7 +110,7 @@ class AppDBUtil():
 
     @classmethod
     def getJobById(cls, job_id=''):
-        job = ''#db.session.query(ApSchedulerJobs).filter(ApSchedulerJobs.id == job_id).first()
+        job = db.session.query(ApSchedulerJobs).filter(ApSchedulerJobs.id == job_id).first()
         return job
 
     @classmethod
