@@ -34,7 +34,10 @@ ENV GOOGLE_CREDENTIALS_JSON=${GOOGLE_CREDENTIALS_JSON}
 RUN mkdir -p /app/data/
 RUN touch /app/data/credentials.json
 RUN echo $GOOGLE_CREDENTIALS_JSON > /app/data/credentials.json
-CMD python3 -m flask run --host=0.0.0.0  --port=5003
+#CMD python3 -m flask run --host=0.0.0.0  --port=5003
+
+CMD  flask db init && flask db stamp head && flask db migrate -m "Initial migration." && python3 -m flask db upgrade && python3 -m flask run --host=0.0.0.0  --port=5003
+
 
 #CMD touch /app/data/credentials.json && echo $GOOGLE_CREDENTIALS_JSON > /app/data/credentials.json  && python3 -m flask run --host=0.0.0.0  --port=5003
 
