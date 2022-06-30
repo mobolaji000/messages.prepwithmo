@@ -67,7 +67,6 @@ class Config(object):
             }
 
             scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone='US/Central')
-            # scheduler.start()
 
 
 
@@ -114,7 +113,6 @@ class Config(object):
             }
 
             scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone='US/Central')
-            #scheduler.start()
 
 
 
@@ -140,7 +138,11 @@ class Config(object):
             UPLOAD_EXTENSIONS = ['.jpg', '.png', '.gif']
             UPLOAD_PATH = '/app/data/uploads'
 
+            SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly', 'https://www.googleapis.com/auth/drive.file']
             CLIENT_SECRETS_FILE = '/app/data/credentials.json'
+
+            os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+            os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
 
             #os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
@@ -158,7 +160,6 @@ class Config(object):
             }
 
             scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone='US/Central')
-            # scheduler.start()
 
 
 
