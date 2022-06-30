@@ -1,0 +1,65 @@
+
+/* Chrome, Safari, Edge, Opera */
+#tp_total::-webkit-outer-spin-button,
+#tp_total::-webkit-inner-spin-button,
+ #college_apps_total::-webkit-outer-spin-button,
+#college_apps_total::-webkit-inner-spin-button,
+#adjust_total::-webkit-outer-spin-button,
+#adjust_total::-webkit-inner-spin-button,
+#transaction_id::-webkit-outer-spin-button,
+#transaction_id::-webkit-inner-spin-button,
+#diag_units::-webkit-outer-spin-button,
+#diag_units::-webkit-inner-spin-button,
+.installment_amounts::-webkit-outer-spin-button,
+.installment_amounts::-webkit-inner-spin-button
+{
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+#tp_total,#college_apps_total,#adjust_total,#transaction_id,#diag_units, .installment_amounts {
+  -moz-appearance: textfield;
+}
+
+
+#full-payment-div, #installment-payment-div {
+display: none !important;
+}
+
+.card-columns {
+  @include media-breakpoint-only(xl) {
+    column-count: 3;
+  }
+  @include media-breakpoint-only(lg) {
+    column-count: 3;
+  }
+  @include media-breakpoint-only(md) {
+    column-count: 3;
+  }
+  @include media-breakpoint-only(sm) {
+    column-count: 3;
+  }
+}
+
+
+/*boostrap examples css */
+
+.b-example-divider {
+  height: 3rem;
+  background-color: rgba(0, 0, 0, .1);
+  border: solid rgba(0, 0, 0, .15);
+  border-width: 1px 0;
+  box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+}
+
+@media (min-width: 992px) {
+  .rounded-lg-3 { border-radius: .3rem; }
+}
+
+
+
+
+
+
+
