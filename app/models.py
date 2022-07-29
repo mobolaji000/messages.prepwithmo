@@ -65,7 +65,7 @@ class Recipient2(db.Model):
     recipient_source_id = db.Column(db.String(8), index=True, nullable=True, unique=True, default='')
     is_active = db.Column(db.Boolean, unique=False,nullable=False, server_default='True')
 
-    #how to edit enum type
+    #how to edit enum type#
     #https://stackoverflow.com/questions/1771543/adding-a-new-value-to-an-existing-enum-type/7834949#7834949
     #https://stackoverflow.com/questions/25811017/how-to-delete-an-enum-type-value-in-postgres
 
@@ -174,7 +174,7 @@ Config.scheduler.add_listener(listen_for_job_modified, EVENT_JOB_MODIFIED)
 def receive_after_insert(mapper, connection, target):
     from dbUtil import AppDBUtil
     try:
-        recipient = Recipient.__table__
+        recipient = Recipient2.__table__
         recipient_id = AppDBUtil.createRecipientId()
         connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.student_email,recipient_first_name=target.student_first_name,recipient_last_name=target.student_last_name,recipient_phone_number=target.student_phone_number,recipient_type='student',is_active=target.is_active,recipient_source_id=target.student_id))
 
@@ -195,7 +195,7 @@ def receive_after_insert(mapper, connection, target):
 def receive_after_insert(mapper, connection, target):
     from dbUtil import AppDBUtil
     try:
-        recipient = Recipient.__table__
+        recipient = Recipient2.__table__
         recipient_id = AppDBUtil.createRecipientId()
         connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.lead_email,recipient_first_name=target.lead_name,recipient_last_name=target.lead_name,recipient_phone_number=target.lead_phone_number,recipient_type='lead',is_active=target.is_active,recipient_source_id=target.lead_id))
 
@@ -209,7 +209,7 @@ def receive_after_insert(mapper, connection, target):
 def receive_after_insert(mapper, connection, target):
     from dbUtil import AppDBUtil
     try:
-        recipient = Recipient.__table__
+        recipient = Recipient2.__table__
         recipient_id = AppDBUtil.createRecipientId()
         connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.prospect_email,recipient_first_name=target.prospect_first_name,recipient_last_name=target.prospect_last_name,recipient_phone_number=target.prospect_phone_number,recipient_type='prospect',is_active=target.is_active,recipient_source_id=target.prospect_id))
 
@@ -222,7 +222,7 @@ def receive_after_insert(mapper, connection, target):
 def receive_after_insert(mapper, connection, target):
     from dbUtil import AppDBUtil
     try:
-        recipient = Recipient.__table__
+        recipient = Recipient2.__table__
         recipient_id = AppDBUtil.createRecipientId()
         connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.tutor_email,recipient_first_name=target.tutor_first_name,recipient_last_name=target.tutor_last_name,recipient_phone_number=target.tutor_phone_number,recipient_type='tutor',is_active=target.is_active,recipient_source_id=target.tutor_id))
 
