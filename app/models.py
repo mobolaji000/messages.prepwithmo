@@ -51,7 +51,7 @@ class GoogleCredentials(db.Model):
 
 
 
-class Recipient(db.Model):
+class Recipient2(db.Model):
     recipient_id = db.Column(db.String(8), primary_key=True, index=True, nullable=False, unique=True, default='')
     date_recipient_created = db.Column(db.DateTime(timezone=True), index=True, server_default=db.func.now())
     recipient_salutation = db.Column(db.String(6), index=True, nullable=True, default='')
