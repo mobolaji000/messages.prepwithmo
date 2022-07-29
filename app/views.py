@@ -430,8 +430,6 @@ def placeholder():
     AppDBUtil.updateRecipientType(recipient_email='mobolaji.akinpelu@yahoo.com', recipient_type='parent')
     recipients = AppDBUtil.getRecipients()
 
-    #TODO add logging with python logging module that you will view in logtail
-
     #TODO copy yourself in every email so you can get to see bugs etc as the system evolves
 
     #TODO rememebr to sent email_description and text_description defualt values to 'default' in the ui bevcause they are used for job name and that requires a non-empty string

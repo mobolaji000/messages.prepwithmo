@@ -1,5 +1,6 @@
 import datetime
 import pytz
+import uuid
 from app import db
 
 from app.models import Recipient,Student, Tutor, Lead, ApSchedulerJobs, GoogleCredentials,ApSchedulerJobsFurtherState
@@ -188,6 +189,24 @@ class AppDBUtil():
         if recipient_to_update:
             recipient_to_update.recipient_type = recipient_type
             cls.executeDBQuery()
+
+    @classmethod
+    def getAllRecipientIds(cls):
+        recipients = Recipient.query.all()
+        recipient_ids = []
+        for recipient in recipients:
+            recipient_ids.append(recipient.recipient_id)
+        logger.debug("All recipient ids are: {}".format(recipient_ids))
+        return recipient_ids
+
+    @classmethod
+    def createRecipientId(cls):
+        existing_recipient_ids = AppDBUtil.getAllRecipientIds()
+        recipient_id = "r-" + str(uuid.uuid4().int >> 64)[:6]
+        while recipient_id in existing_recipient_ids:
+            logger.debug("Recipient id {} already exists".format(recipient_id))
+            recipient_id = "r-" + str(uuid.uuid4().int >> 64)[:6]
+        return recipient_id
 
 
     @classmethod
