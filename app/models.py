@@ -4,6 +4,7 @@ from sqlalchemy import event
 import uuid
 import pickle
 from app import Config
+
 from apscheduler.events import EVENT_JOB_ADDED, EVENT_JOB_REMOVED, EVENT_JOB_MODIFIED
 import traceback
 
@@ -58,9 +59,10 @@ class Recipient(db.Model):
     recipient_last_name = db.Column(db.String(64), index=True, nullable=True, default='')
     recipient_phone_number = db.Column(db.String(22), index=True, unique=True, nullable=True, default='')
     recipient_email = db.Column(db.String(120), index=True, unique=True, nullable=True, default='')
-    recipient_type = db.Column(db.Enum('parent', 'student', 'lead', 'tutor', 'other', name='recipient_type'), index=True, nullable=True, default='')
+    recipient_type = db.Column(db.Enum('parent', 'student', 'lead', 'tutor', 'prospect', 'other', name='recipient_type'), index=True, nullable=True, default='')
     recipient_tags = db.Column(db.ARRAY(db.String), index=True, nullable=True, default='')
     recipient_description = db.Column(db.String(200), index=True, nullable=True, default='')
+    recipient_source_id = db.Column(db.String(8), index=True, nullable=True, unique=True, default='')
     is_active = db.Column(db.Boolean, unique=False,nullable=False, server_default='True')
 
     #how to edit enum type
@@ -78,6 +80,13 @@ class Lead(db.Model):
     def __repr__(self):
         return '<Lead created with lead_id {}>'.format(self.lead_id)
 
+class Prospect(db.Model):
+    __tablename__ = 'prospect'
+    __table_args__ = {'autoload': True, 'autoload_with': db.engine}
+
+
+    def __repr__(self):
+        return '<Prospect created with prospect_id {}>'.format(self.lead_id)
 
 class ApSchedulerJobs(db.Model):
 
@@ -160,29 +169,99 @@ Config.scheduler.add_listener(listen_for_job_added, EVENT_JOB_ADDED)
 Config.scheduler.add_listener(listen_for_job_removed, EVENT_JOB_REMOVED)
 Config.scheduler.add_listener(listen_for_job_modified, EVENT_JOB_MODIFIED)
 
+
 @event.listens_for(Student, 'after_insert')
 def receive_after_insert(mapper, connection, target):
+    from dbUtil import AppDBUtil
     try:
         recipient = Recipient.__table__
-        recipient_id = "r-" + str(uuid.uuid4().int >> 64)[:6]
-        connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.student_email,recipient_first_name=target.student_first_name,recipient_last_name=target.student_last_name,recipient_phone_number=target.student_phone_number,recipient_type='student',is_active=target.is_active))
+        recipient_id = AppDBUtil.createRecipientId()
+        connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.student_email,recipient_first_name=target.student_first_name,recipient_last_name=target.student_last_name,recipient_phone_number=target.student_phone_number,recipient_type='student',is_active=target.is_active,recipient_source_id=target.student_id))
 
         if target.parent_1_email or target.parent_1_phone_number:
-            recipient_id = "r-" + str(uuid.uuid4().int >> 64)[:6]
-            connection.execute(recipient.insert().values(recipient_id=recipient_id, recipient_email=target.parent_1_email, recipient_first_name=target.parent_1_first_name, recipient_last_name=target.parent_1_last_name,recipient_phone_number=target.parent_1_phone_number,recipient_type='parent', is_active=target.is_active))
+            recipient_id = AppDBUtil.createRecipientId()
+            connection.execute(recipient.insert().values(recipient_id=recipient_id, recipient_email=target.parent_1_email, recipient_first_name=target.parent_1_first_name, recipient_last_name=target.parent_1_last_name,recipient_phone_number=target.parent_1_phone_number,recipient_salutation=target.parent_1_salutation,recipient_type='parent', is_active=target.is_active,recipient_source_id=target.student_id))
         if target.parent_2_email or target.parent_2_phone_number:
-            recipient_id = "r-" + str(uuid.uuid4().int >> 64)[:6]
-            connection.execute(recipient.insert().values(recipient_id=recipient_id, recipient_email=target.parent_2_email, recipient_first_name=target.parent_2_first_name, recipient_last_name=target.parent_2_last_name,recipient_phone_number=target.parent_2_phone_number, recipient_type='parent',is_active=target.is_active))
+            recipient_id = AppDBUtil.createRecipientId()
+            connection.execute(recipient.insert().values(recipient_id=recipient_id, recipient_email=target.parent_2_email, recipient_first_name=target.parent_2_first_name, recipient_last_name=target.parent_2_last_name,recipient_phone_number=target.parent_2_phone_number,recipient_salutation=target.parent_2_salutation,recipient_type='parent',is_active=target.is_active,recipient_source_id=target.student_id))
+
     except Exception as e:
-        print("Error in receive_after_insert")
-        print(e)
+        logger.error("Error in Student receive_after_insert")
+        logger.error(e)
+        traceback.print_exc()
+
+
+@event.listens_for(Lead, 'after_insert')
+def receive_after_insert(mapper, connection, target):
+    from dbUtil import AppDBUtil
+    try:
+        recipient = Recipient.__table__
+        recipient_id = AppDBUtil.createRecipientId()
+        connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.lead_email,recipient_first_name=target.lead_name,recipient_last_name=target.lead_name,recipient_phone_number=target.lead_phone_number,recipient_type='lead',is_active=target.is_active,recipient_source_id=target.lead_id))
+
+    except Exception as e:
+        logger.error("Error in Lead receive_after_insert")
+        logger.error(e)
+        traceback.print_exc()
+
+
+@event.listens_for(Prospect, 'after_insert')
+def receive_after_insert(mapper, connection, target):
+    from dbUtil import AppDBUtil
+    try:
+        recipient = Recipient.__table__
+        recipient_id = AppDBUtil.createRecipientId()
+        connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.prospect_email,recipient_first_name=target.prospect_first_name,recipient_last_name=target.prospect_last_name,recipient_phone_number=target.prospect_phone_number,recipient_type='prospect',is_active=target.is_active,recipient_source_id=target.prospect_id))
+
+    except Exception as e:
+        logger.error("Error in Prospect receive_after_insert")
+        logger.error(e)
+        traceback.print_exc()
+
+@event.listens_for(Tutor, 'after_insert')
+def receive_after_insert(mapper, connection, target):
+    from dbUtil import AppDBUtil
+    try:
+        recipient = Recipient.__table__
+        recipient_id = AppDBUtil.createRecipientId()
+        connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.tutor_email,recipient_first_name=target.tutor_first_name,recipient_last_name=target.tutor_last_name,recipient_phone_number=target.tutor_phone_number,recipient_type='tutor',is_active=target.is_active,recipient_source_id=target.tutor_id))
+
+    except Exception as e:
+        logger.error("Error in Tutor receive_after_insert")
+        logger.error(e)
         traceback.print_exc()
 
 @event.listens_for(Student, 'after_update')
 def receive_after_update(mapper, connection, target):
-    with connection.begin() as trans:
-        pass
+    #TODO There is currently no way to update a student via the ORM in the entire prepwithmo applications suite. So it is pointless to develop this method as it will only execute if after an update via the ORM. Whenever update via the ORM is available, the way to develop this will be to create a column in receipient called recipient_source_id, which will contain the ids of the source of the recipient e.g. student-id, tutor-id etc and a foreign key relation ship from the applicabnle tables to the recipient table. When values in these accompanying tables get updated, their ids will be used to check the recipient_source_id column to know which row in the recipient table needs to be updated.
+    pass
+
+    # from dbUtil import AppDBUtil
+    # try:
+    #     recipient = Recipient.__table__
+    #     recipient_id = AppDBUtil.createRecipientId()
+    #     connection.execute(recipient.update().where(recipient.recipient_source_id == target.student_id).values(recipient_email=target.student_email, recipient_first_name=target.student_first_name, recipient_last_name=target.student_last_name, recipient_phone_number=target.student_phone_number,recipient_type='student', is_active=target.is_active))
+    #
+    #     if target.parent_1_email or target.parent_1_phone_number:
+    #         recipient_id = AppDBUtil.createRecipientId()
+    #         connection.execute(recipient.insert().values(recipient_id=recipient_id, recipient_email=target.parent_1_email, recipient_first_name=target.parent_1_first_name, recipient_last_name=target.parent_1_last_name,recipient_phone_number=target.parent_1_phone_number, recipient_type='parent', is_active=target.is_active))
+    #     if target.parent_2_email or target.parent_2_phone_number:
+    #         recipient_id = AppDBUtil.createRecipientId()
+    #         connection.execute(recipient.insert().values(recipient_id=recipient_id, recipient_email=target.parent_2_email, recipient_first_name=target.parent_2_first_name, recipient_last_name=target.parent_2_last_name,recipient_phone_number=target.parent_2_phone_number, recipient_type='parent', is_active=target.is_active))
+    #
+    # except Exception as e:
+    #     print("Error in receive_after_insert")
+    #     print(e)
+    #     traceback.print_exc()
         #connection.execute(update(Tutor).where(target.id == Tutor.__table__.c.user_id).values(tutor_email=target.email,tutor_first_name=target.first_name,tutor_last_name=target.last_name,tutor_phone_number=target.phone_number,is_active=target.active))
+
+
+@event.listens_for(Student, 'after_delete')
+def receive_after_delete(mapper, connection, target):
+    #TODO probably dont want to delete recipients even if the upstrema source is deleted
+    pass
+    #children = relationship("Child", cascade="all,delete", backref="parent")
+    #https://stackoverflow.com/questions/5033547/sqlalchemy-cascade-delete
 
 
 db.create_all()
