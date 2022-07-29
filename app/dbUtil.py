@@ -3,7 +3,7 @@ import pytz
 import uuid
 from app import db
 
-from app.models import Recipient2,Student, Tutor, Lead, ApSchedulerJobs, GoogleCredentials,ApSchedulerJobsFurtherState
+from app.models import Recipient,Student, Tutor, Lead, ApSchedulerJobs, GoogleCredentials,ApSchedulerJobsFurtherState
 import pandas
 from sqlalchemy import select
 import logging
@@ -27,7 +27,7 @@ class AppDBUtil():
         students = Student.__table__.delete()
         db.session.execute(students)
 
-        recipients = Recipient2.__table__.delete()
+        recipients = Recipient.__table__.delete()
         db.session.execute(recipients)
 
         jobs = ApSchedulerJobs.__table__.delete()
@@ -167,17 +167,17 @@ class AppDBUtil():
 
     @classmethod
     def getRecipients(cls):
-        recipients = db.session.query(Recipient2).filter(Recipient2.is_active == True).all()
+        recipients = db.session.query(Recipient).filter(Recipient.is_active == True).all()
         return recipients
 
     @classmethod
     def getRecipientByRecipientId(cls, recipient_id=''):
-        recipient = db.session.query(Recipient2).filter(Recipient2.recipient_id == recipient_id).first()
+        recipient = db.session.query(Recipient).filter(Recipient.recipient_id == recipient_id).first()
         return recipient
 
     @classmethod
     def updateRecipientTags(cls, recipient_email = '', recipient_phone_number = '', recipient_tags=[]):
-        recipient_to_update = db.session.query(Recipient2).filter(((Recipient2.recipient_email == recipient_email) | (Recipient2.recipient_phone_number == recipient_phone_number)) & (Recipient2.is_active == True)).first()
+        recipient_to_update = db.session.query(Recipient).filter(((Recipient.recipient_email == recipient_email) | (Recipient.recipient_phone_number == recipient_phone_number)) & (Recipient.is_active == True)).first()
         if recipient_to_update:
             recipient_to_update.recipient_tags = recipient_tags
             cls.executeDBQuery()
@@ -185,14 +185,14 @@ class AppDBUtil():
 
     @classmethod
     def updateRecipientType(cls, recipient_email='', recipient_phone_number='', recipient_type=''):
-        recipient_to_update = db.session.query(Recipient2).filter(((Recipient2.recipient_email == recipient_email) | (Recipient2.recipient_phone_number == recipient_phone_number)) & (Recipient2.is_active == True)).first()
+        recipient_to_update = db.session.query(Recipient).filter(((Recipient.recipient_email == recipient_email) | (Recipient.recipient_phone_number == recipient_phone_number)) & (Recipient.is_active == True)).first()
         if recipient_to_update:
             recipient_to_update.recipient_type = recipient_type
             cls.executeDBQuery()
 
     @classmethod
     def getAllRecipientIds(cls):
-        recipients = Recipient2.query.all()
+        recipients = Recipient.query.all()
         recipient_ids = []
         for recipient in recipients:
             recipient_ids.append(recipient.recipient_id)
