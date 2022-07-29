@@ -65,7 +65,7 @@ class Recipient2(db.Model):
     recipient_source_id = db.Column(db.String(8), index=True, nullable=True, unique=True, default='')
     is_active = db.Column(db.Boolean, unique=False,nullable=False, server_default='True')
 
-    #how to edit enum type
+    #how to edit enum type#
     #https://stackoverflow.com/questions/1771543/adding-a-new-value-to-an-existing-enum-type/7834949#7834949
     #https://stackoverflow.com/questions/25811017/how-to-delete-an-enum-type-value-in-postgres
 
