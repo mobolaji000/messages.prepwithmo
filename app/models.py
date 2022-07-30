@@ -177,13 +177,18 @@ def receive_after_insert(mapper, connection, target):
         recipient = Recipient.__table__
         recipient_id = AppDBUtil.createRecipientId()
         connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.student_email,recipient_first_name=target.student_first_name,recipient_last_name=target.student_last_name,recipient_phone_number=target.student_phone_number,recipient_type='student',is_active=target.is_active,recipient_source_id=target.student_id))
+        logger.info("Recipient {} inserted based on Student {}".format(recipient_id,target.student_id))
+
 
         if target.parent_1_email or target.parent_1_phone_number:
             recipient_id = AppDBUtil.createRecipientId()
             connection.execute(recipient.insert().values(recipient_id=recipient_id, recipient_email=target.parent_1_email, recipient_first_name=target.parent_1_first_name, recipient_last_name=target.parent_1_last_name,recipient_phone_number=target.parent_1_phone_number,recipient_salutation=target.parent_1_salutation,recipient_type='parent', is_active=target.is_active,recipient_source_id=target.student_id))
+            logger.info("Recipient {} inserted based on Student {}".format(recipient_id, target.student_id))
+
         if target.parent_2_email or target.parent_2_phone_number:
             recipient_id = AppDBUtil.createRecipientId()
             connection.execute(recipient.insert().values(recipient_id=recipient_id, recipient_email=target.parent_2_email, recipient_first_name=target.parent_2_first_name, recipient_last_name=target.parent_2_last_name,recipient_phone_number=target.parent_2_phone_number,recipient_salutation=target.parent_2_salutation,recipient_type='parent',is_active=target.is_active,recipient_source_id=target.student_id))
+            logger.info("Recipient {} inserted based on Student {}".format(recipient_id, target.student_id))
 
     except Exception as e:
         logger.error("Error in Student receive_after_insert")
@@ -198,6 +203,7 @@ def receive_after_insert(mapper, connection, target):
         recipient = Recipient.__table__
         recipient_id = AppDBUtil.createRecipientId()
         connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.lead_email,recipient_first_name=target.lead_name,recipient_last_name=target.lead_name,recipient_phone_number=target.lead_phone_number,recipient_type='lead',is_active=target.is_active,recipient_source_id=target.lead_id))
+        logger.info("Recipient {} inserted based on Lead {}".format(recipient_id,target.lead_id))
 
     except Exception as e:
         logger.error("Error in Lead receive_after_insert")
@@ -212,6 +218,7 @@ def receive_after_insert(mapper, connection, target):
         recipient = Recipient.__table__
         recipient_id = AppDBUtil.createRecipientId()
         connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.prospect_email,recipient_first_name=target.prospect_first_name,recipient_last_name=target.prospect_last_name,recipient_phone_number=target.prospect_phone_number,recipient_type='prospect',is_active=target.is_active,recipient_source_id=target.prospect_id))
+        logger.info("Recipient {} inserted based on Prospect {}".format(recipient_id,target.prospect_id))
 
     except Exception as e:
         logger.error("Error in Prospect receive_after_insert")
@@ -225,6 +232,7 @@ def receive_after_insert(mapper, connection, target):
         recipient = Recipient.__table__
         recipient_id = AppDBUtil.createRecipientId()
         connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.tutor_email,recipient_first_name=target.tutor_first_name,recipient_last_name=target.tutor_last_name,recipient_phone_number=target.tutor_phone_number,recipient_type='tutor',is_active=target.is_active,recipient_source_id=target.tutor_id))
+        logger.info("Recipient {} inserted based on Tutor {}".format(recipient_id,target.tutor_id))
 
     except Exception as e:
         logger.error("Error in Tutor receive_after_insert")
