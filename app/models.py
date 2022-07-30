@@ -202,7 +202,10 @@ def receive_after_insert(mapper, connection, target):
     try:
         recipient = Recipient.__table__
         recipient_id = AppDBUtil.createRecipientId()
-        connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.lead_email,recipient_first_name=target.lead_name,recipient_last_name=target.lead_name,recipient_phone_number=target.lead_phone_number,recipient_type='lead',is_active=target.is_active,recipient_source_id=target.lead_id))
+        connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.lead_email,recipient_first_name=target.lead_name,recipient_last_name=target.lead_name,recipient_phone_number=target.lead_phone_number,recipient_type='lead',recipient_source_id=target.lead_id))
+        #TODO uncomment after figuring out how to add is_active to recipient table
+        #connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.lead_email,recipient_first_name=target.lead_name,recipient_last_name=target.lead_name,recipient_phone_number=target.lead_phone_number,recipient_type='lead',is_active=target.is_active,recipient_source_id=target.lead_id))
+
         logger.info("Recipient {} inserted based on Lead {}".format(recipient_id,target.lead_id))
 
     except Exception as e:

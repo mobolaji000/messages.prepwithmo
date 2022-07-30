@@ -66,7 +66,7 @@ class AppDBUtil():
                          how_did_they_hear_about_us='',how_did_they_hear_about_us_details='')
         db.session.add(statement)
 
-        statement = Lead(lead_id='l-111111', lead_name='Three', lead_phone_number='7202785988', lead_email='mobolajiakinpelu00@gmail.com',
+        statement = Lead(lead_id='l-111111', lead_name='Lead_3', lead_phone_number='7202785988', lead_email='mobolajiakinpelu00@gmail.com',
                          what_service_are_they_interested_in='',what_next='',meeting_notes_to_keep_in_mind='',
                          how_did_they_hear_about_us='',how_did_they_hear_about_us_details='')
         db.session.add(statement)
