@@ -423,7 +423,8 @@ def create_job(job_id, job_medium_being_modified, status_of_job_being_modified):
 @server.route('/placeholder',methods=['GET', 'POST'])
 @login_required
 def placeholder():
-    AppDBUtil.setupTestStudents()
+    AppDBUtil.setupTestRecipients()
+
     AppDBUtil.updateRecipientTags(recipient_email='mo@vensti.com', recipient_phone_number='4437636418', recipient_tags=['cohort-1-2022', 'essays-2022'])
     AppDBUtil.updateRecipientType(recipient_email='mo@vensti.com', recipient_phone_number='4437636418', recipient_type='student')
     AppDBUtil.updateRecipientTags(recipient_email='mobolaji.akinpelu@yahoo.com', recipient_tags=['cohort-1-2022-father'])

@@ -22,10 +22,13 @@ class AppDBUtil():
         pass
 
     @classmethod
-    def setupTestStudents(cls):
+    def setupTestRecipients(cls):
 
         students = Student.__table__.delete()
         db.session.execute(students)
+
+        leads = Lead.__table__.delete()
+        db.session.execute(leads)
 
         recipients = Recipient.__table__.delete()
         db.session.execute(recipients)
@@ -53,7 +56,18 @@ class AppDBUtil():
 
         db.session.add(statement)
 
+        statement = Lead(lead_id='l-130860', lead_name='Lead_1', lead_phone_number='6172917242', lead_email='mo@vensti.com')
+        db.session.add(statement)
+
+        statement = Lead(lead_id='l-106702', prospect_id='p-106702', lead_name='Lead_2', lead_phone_number='4793011592', lead_email='mo@prepwithmo.com')
+        db.session.add(statement)
+
+        statement = Lead(lead_id='l-111111', prospect_id='p-111111', lead_name='Three', lead_phone_number='7202785988', lead_email='mobolajiakinpelu00@gmail.com')
+        db.session.add(statement)
+
         cls.executeDBQuery()
+
+
 
     @classmethod
     def getGoogleCredentials(cls):
