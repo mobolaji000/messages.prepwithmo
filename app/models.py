@@ -62,7 +62,7 @@ class Recipient(db.Model):
     recipient_type = db.Column(db.Enum('parent', 'student', 'lead', 'tutor', 'prospect', 'other', name='recipient_type'), index=True, nullable=True, default='')
     recipient_tags = db.Column(db.ARRAY(db.String), index=True, nullable=True, default='')
     recipient_description = db.Column(db.String(200), index=True, nullable=True, default='')
-    recipient_source_id = db.Column(db.String(8), index=True, nullable=True, unique=True, default='')
+    recipient_source_id = db.Column(db.String(8), index=True, nullable=True, unique=False, default='')
     is_active = db.Column(db.Boolean, unique=False,nullable=False, server_default='True')
 
     #how to edit enum type#
