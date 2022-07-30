@@ -220,7 +220,7 @@ def receive_after_insert(mapper, connection, target):
     try:
         recipient = Recipient.__table__
         recipient_id = AppDBUtil.createRecipientId()
-        connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.prospect_email,recipient_first_name=target.prospect_first_name,recipient_last_name=target.prospect_last_name,recipient_phone_number=target.prospect_phone_number,recipient_type='prospect',is_active=target.is_active,recipient_source_id=target.prospect_id))
+        connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.prospect_email,recipient_first_name=target.prospect_first_name,recipient_last_name=target.prospect_last_name,recipient_phone_number=target.prospect_phone_number,recipient_type='prospect',recipient_source_id=target.prospect_id))
         logger.info("Recipient {} inserted based on Prospect {}".format(recipient_id,target.prospect_id))
 
     except Exception as e:
@@ -234,7 +234,7 @@ def receive_after_insert(mapper, connection, target):
     try:
         recipient = Recipient.__table__
         recipient_id = AppDBUtil.createRecipientId()
-        connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.tutor_email,recipient_first_name=target.tutor_first_name,recipient_last_name=target.tutor_last_name,recipient_phone_number=target.tutor_phone_number,recipient_type='tutor',is_active=target.is_active,recipient_source_id=target.tutor_id))
+        connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.tutor_email,recipient_first_name=target.tutor_first_name,recipient_last_name=target.tutor_last_name,recipient_phone_number=target.tutor_phone_number,recipient_type='tutor',recipient_source_id=target.tutor_id))
         logger.info("Recipient {} inserted based on Tutor {}".format(recipient_id,target.tutor_id))
 
     except Exception as e:

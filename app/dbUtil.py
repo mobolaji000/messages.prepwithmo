@@ -56,17 +56,17 @@ class AppDBUtil():
 
         db.session.add(statement)
 
-        statement = Lead(lead_id='l-130860', lead_name='Lead_1', lead_phone_number='6172917242', lead_email='mo@vensti.com',
+        statement = Lead(lead_id='l-130860', lead_name='Lead_1', lead_phone_number='9172917242', lead_email='lmo@vensti.com',
                          what_service_are_they_interested_in='',what_next='',meeting_notes_to_keep_in_mind='',
                          how_did_they_hear_about_us='',how_did_they_hear_about_us_details='')
         db.session.add(statement)
 
-        statement = Lead(lead_id='l-106702',lead_name='Lead_2', lead_phone_number='4793011592', lead_email='mo@prepwithmo.com',
+        statement = Lead(lead_id='l-106702',lead_name='Lead_2', lead_phone_number='9793011592', lead_email='lmo@prepwithmo.com',
                          what_service_are_they_interested_in='',what_next='',meeting_notes_to_keep_in_mind='',
                          how_did_they_hear_about_us='',how_did_they_hear_about_us_details='')
         db.session.add(statement)
 
-        statement = Lead(lead_id='l-111111', lead_name='Lead_3', lead_phone_number='7202785988', lead_email='mobolajiakinpelu00@gmail.com',
+        statement = Lead(lead_id='l-111111', lead_name='Lead_3', lead_phone_number='9202785988', lead_email='lmobolajiakinpelu00@gmail.com',
                          what_service_are_they_interested_in='',what_next='',meeting_notes_to_keep_in_mind='',
                          how_did_they_hear_about_us='',how_did_they_hear_about_us_details='')
         db.session.add(statement)
