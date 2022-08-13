@@ -170,6 +170,41 @@ Config.scheduler.add_listener(listen_for_job_removed, EVENT_JOB_REMOVED)
 Config.scheduler.add_listener(listen_for_job_modified, EVENT_JOB_MODIFIED)
 
 
+@event.listens_for(db.engine, 'commit')
+def receive_commit(conn):
+    print('In receive_commit')
+    print("conn is {}".format(conn))
+    print("conn.get_transaction is {}".format(conn.get_transaction))
+    print("conn.info is {}".format(conn.info))
+    print("conn dir is {}".format(dir(conn)))
+    print("")
+
+
+
+@event.listens_for(db.engine, 'after_execute')
+def receive_after_execute(conn, clauseelement, multiparams, params, execution_options, result):
+    print('In after_execute')
+    print("conn is {}".format(conn))
+    print("clauseelement is {}".format(clauseelement))
+    print("multiparams is {}".format(multiparams))
+    print(" params is {}".format( params))
+    print("execution_options is {}".format(execution_options))
+    print("result is {}".format(result))
+    print("")
+
+@event.listens_for(db.engine, 'after_cursor_execute')
+def receive_after_cursor_execute(conn, cursor, statement, parameters, context, executemany):
+    print('In after_cursor_execute')
+    print("conn is {}".format(conn))
+    print("cursor is {}".format(cursor))
+    print("statement is {}".format(statement))
+    print("compiled statement is {}".format(statement.compile(compile_kwargs={"literal_binds": True})))
+    print("parameters is {}".format(parameters))
+    print("context is {}".format(context))
+    print("executemany is {}".format(executemany))
+    print("")
+
+
 @event.listens_for(Student, 'after_insert')
 def receive_after_insert(mapper, connection, target):
     from dbUtil import AppDBUtil
