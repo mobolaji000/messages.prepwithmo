@@ -169,6 +169,15 @@ Config.scheduler.add_listener(listen_for_job_added, EVENT_JOB_ADDED)
 Config.scheduler.add_listener(listen_for_job_removed, EVENT_JOB_REMOVED)
 Config.scheduler.add_listener(listen_for_job_modified, EVENT_JOB_MODIFIED)
 
+from sqlalchemy import event, DDL
+trig_ddl = DDL("""
+    CREATE TRIGGER customers_search_vector_update BEFORE INSERT OR UPDATE
+    ON customers
+    FOR EACH ROW EXECUTE PROCEDURE
+    tsvector_update_trigger(search_vector,'pg_catalog.english',customer_code,customer_name);
+""")
+tbl = Recipient.__table__
+event.listen(tbl, 'after_create', trig_ddl.execute_if(dialect='postgresql'))
 
 @event.listens_for(db.engine, 'commit')
 def receive_commit(conn):
