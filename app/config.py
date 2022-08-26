@@ -32,7 +32,7 @@ class Config(object):
             dbPassword = os.environ.get('dbPasswordLocal')
             SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://'+str(dbUserName)+':'+str(dbPassword)+'@host/mobolajioo'
             SQLALCHEMY_TRACK_MODIFICATIONS = False
-            SQLALCHEMY_ECHO = True
+            #SQLALCHEMY_ECHO = True
 
             twilio_account_sid = os.environ['TWILIO_ACCOUNT_SID']
             twilio_auth_token = os.environ['TWILIO_AUTH_TOKEN']
@@ -69,6 +69,10 @@ class Config(object):
 
             scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone='US/Central')
 
+            os.environ["psycopg_url"] = "host"
+            os.environ["psycopg_db"] = "mobolajioo"
+            os.environ["psycopg_port"] = "5432"
+
 
 
         elif os.environ['DEPLOY_REGION'] == 'dev':
@@ -82,7 +86,7 @@ class Config(object):
             dbPassword = awsInstance.get_secret("do_db_cred", "dev_password")
             SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://'+str(dbUserName)+':'+str(dbPassword)+'@app-27fee962-3fa3-41cb-aecc-35d29dbd568e-do-user-9096158-0.b.db.ondigitalocean.com:25060/db'
             SQLALCHEMY_TRACK_MODIFICATIONS = False
-            SQLALCHEMY_ECHO = True
+            #SQLALCHEMY_ECHO = True
 
             twilio_account_sid = awsInstance.get_secret("twilio_cred", "TWILIO_ACCOUNT_SID")
             twilio_auth_token = awsInstance.get_secret("twilio_cred", "TWILIO_AUTH_TOKEN")
@@ -116,8 +120,9 @@ class Config(object):
 
             scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone='US/Central')
 
-
-
+            os.environ["psycopg_url"] = "app-27fee962-3fa3-41cb-aecc-35d29dbd568e-do-user-9096158-0.b.db.ondigitalocean.com"
+            os.environ["psycopg_db"] = "db"
+            os.environ["psycopg_port"] = "25060"
 
 
         elif os.environ['DEPLOY_REGION'] == 'prod':
@@ -131,7 +136,7 @@ class Config(object):
             dbPassword = awsInstance.get_secret("do_db_cred", "password")
             SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://' + str(dbUserName) + ':' + str(dbPassword) + '@yet-another-backup-do-user-9096158-0.b.db.ondigitalocean.com:25060/db'
             SQLALCHEMY_TRACK_MODIFICATIONS = False
-            SQLALCHEMY_ECHO = True
+            #SQLALCHEMY_ECHO = True
 
             twilio_account_sid = awsInstance.get_secret("twilio_cred", "TWILIO_ACCOUNT_SID")
             twilio_auth_token = awsInstance.get_secret("twilio_cred", "TWILIO_AUTH_TOKEN")
@@ -164,6 +169,9 @@ class Config(object):
 
             scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone='US/Central')
 
+            os.environ["psycopg_url"] = "yet-another-backup-do-user-9096158-0.b.db.ondigitalocean.com"
+            os.environ["psycopg_db"] = "db"
+            os.environ["psycopg_port"] = "25060"
 
 
 

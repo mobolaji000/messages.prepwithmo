@@ -3,8 +3,7 @@ import pytz
 import uuid
 from app import db
 
-from app.models import Recipient,Student, Tutor, Lead, ApSchedulerJobs, GoogleCredentials,ApSchedulerJobsFurtherState
-import pandas
+from app.models import Recipient,Student, Tutor, Lead, ApSchedulerJobs, GoogleCredentials,ApSchedulerJobsFurtherState, Prospect
 from sqlalchemy import select
 import logging
 import traceback
@@ -24,54 +23,98 @@ class AppDBUtil():
     @classmethod
     def setupTestRecipients(cls):
 
-        students = Student.__table__.delete()
-        db.session.execute(students)
+        try:
 
-        leads = Lead.__table__.delete()
-        db.session.execute(leads)
+            students = Student.__table__.delete()
+            db.session.execute(students)
 
-        recipients = Recipient.__table__.delete()
-        db.session.execute(recipients)
+            tutors = Tutor.__table__.delete()
+            db.session.execute(tutors)
 
-        jobs = ApSchedulerJobs.__table__.delete()
-        db.session.execute(jobs)
+            prospects = Prospect.__table__.delete()
+            db.session.execute(prospects)
 
-        statement = Student(student_id='s-130860', prospect_id='p-130860', student_first_name='Student_1', student_last_name='One', student_phone_number='6172917242', student_email='mo@vensti.com',
-                                           parent_1_salutation='Mr.', parent_1_first_name='Father_1', parent_1_last_name='One', parent_1_phone_number='4104280093', parent_1_email='mobolaji.akinpelu@yahoo.com',
-                                           parent_2_salutation='Ms.', parent_2_first_name='Mother_1', parent_2_last_name='On', parent_2_phone_number='4133136331', parent_2_email='c@vensti.com')
+            leads = Lead.__table__.delete()
+            db.session.execute(leads)
+
+            recipients = Recipient.__table__.delete()
+            db.session.execute(recipients)
+
+            jobs = ApSchedulerJobs.__table__.delete()
+            db.session.execute(jobs)
+
+            ####################################
+
+            statement = Prospect(prospect_id='p-130860', prospect_first_name='Prospect_1', prospect_last_name='One', prospect_email='pmo@vensti.com',
+                              prospect_phone_number=str(uuid.uuid4().int >> 64)[:10], how_did_they_hear_about_us='',how_did_they_hear_about_us_details='')
+            db.session.add(statement)
+
+            statement = Prospect(prospect_id='p-106702', prospect_first_name='Prospect_2', prospect_last_name='Two', prospect_email='pmo@prepwithmo.com',
+                              prospect_phone_number=str(uuid.uuid4().int >> 64)[:10], how_did_they_hear_about_us='',how_did_they_hear_about_us_details='')
+            db.session.add(statement)
+
+            statement = Prospect(prospect_id='p-111111', prospect_first_name='Prospect_3', prospect_last_name='Three', prospect_email='pmobolajiakinpelu00@gmail.com',
+                              prospect_phone_number=str(uuid.uuid4().int >> 64)[:10], how_did_they_hear_about_us='',how_did_they_hear_about_us_details='')
+            db.session.add(statement)
+
+            #################
+
+            statement = Student(student_id='s-130860', prospect_id='p-130860', student_first_name='Student_1', student_last_name='One', student_phone_number='6172917242', student_email='mo@vensti.com',
+                                               parent_1_salutation='Mr.', parent_1_first_name='Father_1', parent_1_last_name='One', parent_1_phone_number='4104280093', parent_1_email='mobolaji.akinpelu@yahoo.com',
+                                               parent_2_salutation='Ms.', parent_2_first_name='Mother_1', parent_2_last_name='On', parent_2_phone_number='4133136331', parent_2_email='c@vensti.com')
 
 
 
-        db.session.add(statement)
+            db.session.add(statement)
 
-        statement = Student(student_id='s-106702', prospect_id='p-106702', student_first_name='Student_2', student_last_name='Two', student_phone_number='4793011592', student_email='mo@prepwithmo.com',
-                                           parent_1_salutation='Mr.', parent_1_first_name='Father_2', parent_1_last_name='Two', parent_1_phone_number='4437636418', parent_1_email='beejaei@yahoo.com',
-                                           parent_2_salutation='Ms.', parent_2_first_name='Mother_2', parent_2_last_name='Two', parent_2_phone_number='4792950378', parent_2_email='b@vensti.com')
+            statement = Student(student_id='s-106702', prospect_id='p-106702', student_first_name='Student_2', student_last_name='Two', student_phone_number='4793011592', student_email='mo@prepwithmo.com',
+                                               parent_1_salutation='Mr.', parent_1_first_name='Father_2', parent_1_last_name='Two', parent_1_phone_number='4437636418', parent_1_email='beejaei@yahoo.com',
+                                               parent_2_salutation='Ms.', parent_2_first_name='Mother_2', parent_2_last_name='Two', parent_2_phone_number='4792950378', parent_2_email='b@vensti.com')
 
-        db.session.add(statement)
+            db.session.add(statement)
 
-        statement = Student(student_id='s-111111', prospect_id='p-111111', student_first_name='Student_3', student_last_name='Three', student_phone_number='7202785988', student_email='mobolajiakinpelu00@gmail.com',
-                               parent_1_salutation='Mr.', parent_1_first_name='Father_3', parent_1_last_name='Three', parent_1_phone_number='9725847364', parent_1_email='ben_brucey@yahoo.com',
-                               parent_2_salutation='Ms.', parent_2_first_name='Mother_3', parent_2_last_name='Three', parent_2_phone_number='8622357387', parent_2_email='a@vensti.com')
+            statement = Student(student_id='s-111111', prospect_id='p-111111', student_first_name='Student_3', student_last_name='Three', student_phone_number='7202785988', student_email='mobolajiakinpelu00@gmail.com',
+                                   parent_1_salutation='Mr.', parent_1_first_name='Father_3', parent_1_last_name='Three', parent_1_phone_number='9725847364', parent_1_email='ben_brucey@yahoo.com',
+                                   parent_2_salutation='Ms.', parent_2_first_name='Mother_3', parent_2_last_name='Three', parent_2_phone_number='8622357387', parent_2_email='a@vensti.com')
 
-        db.session.add(statement)
+            db.session.add(statement)
 
-        statement = Lead(lead_id='l-130860', lead_name='Lead_1', lead_phone_number='9172917242', lead_email='lmo@vensti.com',
-                         what_service_are_they_interested_in='',what_next='',meeting_notes_to_keep_in_mind='',
-                         how_did_they_hear_about_us='',how_did_they_hear_about_us_details='')
-        db.session.add(statement)
+            statement = Lead(lead_id='l-130860', lead_name='Lead_1', lead_phone_number='9172917242', lead_email='lmo@vensti.com',
+                             what_service_are_they_interested_in='',what_next='',meeting_notes_to_keep_in_mind='',
+                             how_did_they_hear_about_us='',how_did_they_hear_about_us_details='')
+            db.session.add(statement)
 
-        statement = Lead(lead_id='l-106702',lead_name='Lead_2', lead_phone_number='9793011592', lead_email='lmo@prepwithmo.com',
-                         what_service_are_they_interested_in='',what_next='',meeting_notes_to_keep_in_mind='',
-                         how_did_they_hear_about_us='',how_did_they_hear_about_us_details='')
-        db.session.add(statement)
+            statement = Lead(lead_id='l-106702',lead_name='Lead_2', lead_phone_number='9793011592', lead_email='lmo@prepwithmo.com',
+                             what_service_are_they_interested_in='',what_next='',meeting_notes_to_keep_in_mind='',
+                             how_did_they_hear_about_us='',how_did_they_hear_about_us_details='')
+            db.session.add(statement)
 
-        statement = Lead(lead_id='l-111111', lead_name='Lead_3', lead_phone_number='9202785988', lead_email='lmobolajiakinpelu00@gmail.com',
-                         what_service_are_they_interested_in='',what_next='',meeting_notes_to_keep_in_mind='',
-                         how_did_they_hear_about_us='',how_did_they_hear_about_us_details='')
-        db.session.add(statement)
+            statement = Lead(lead_id='l-111111', lead_name='Lead_3', lead_phone_number='9202785988', lead_email='lmobolajiakinpelu00@gmail.com',
+                             what_service_are_they_interested_in='',what_next='',meeting_notes_to_keep_in_mind='',
+                             how_did_they_hear_about_us='',how_did_they_hear_about_us_details='')
+            db.session.add(statement)
 
-        cls.executeDBQuery()
+
+            ####################################
+
+            statement = Tutor(user_id='1', tutor_first_name='Tutor_1', tutor_last_name='One', tutor_email='tmo@vensti.com',
+                              tutor_phone_number=str(uuid.uuid4().int >> 64)[:10],is_active=True)
+            db.session.add(statement)
+
+            statement = Tutor(user_id='2', tutor_first_name='Tutor_2', tutor_last_name='Two', tutor_email='tmo@prepwithmo.com',
+                              tutor_phone_number=str(uuid.uuid4().int >> 64)[:10], is_active=True)
+            db.session.add(statement)
+
+            statement = Tutor(user_id='3', tutor_first_name='Tutor_3', tutor_last_name='Three', tutor_email='tmobolajiakinpelu00@gmail.com',
+                              tutor_phone_number=str(uuid.uuid4().int >> 64)[:10], is_active=True)
+            db.session.add(statement)
+
+            cls.executeDBQuery()
+        except Exception as e:
+            print("Error in setupTestRecipients")
+            print(e)
+            traceback.print_exc()
+
 
 
 

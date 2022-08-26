@@ -428,7 +428,7 @@ def placeholder():
     AppDBUtil.updateRecipientTags(recipient_email='mo@vensti.com', recipient_phone_number='4437636418', recipient_tags=['cohort-1-2022', 'essays-2022'])
     AppDBUtil.updateRecipientType(recipient_email='mo@vensti.com', recipient_phone_number='4437636418', recipient_type='student')
     AppDBUtil.updateRecipientTags(recipient_email='mobolaji.akinpelu@yahoo.com', recipient_tags=['cohort-1-2022-father'])
-    AppDBUtil.updateRecipientType(recipient_email='mobolaji.akinpelu@yahoo.com', recipient_type='parent')
+    AppDBUtil.updateRecipientType(recipient_email='mobolaji.akinpelu@yahoo.com', recipient_type='parent_1')
     recipients = AppDBUtil.getRecipients()
 
     #TODO copy yourself in every email so you can get to see bugs etc as the system evolves

@@ -1,9 +1,14 @@
 from app import db, metadata
 from sqlalchemy.dialects.postgresql import JSONB, BYTEA
-from sqlalchemy import event
-import uuid
-import pickle
+from sqlalchemy import event, DDL
+from sqlalchemy.sql import text
+from queries import student_table_trigger_text,tutor_table_trigger_text,lead_table_trigger_text,prospect_table_trigger_text
 from app import Config
+
+from redis import Redis
+from rq import Queue
+from worker import Worker
+import os
 
 from apscheduler.events import EVENT_JOB_ADDED, EVENT_JOB_REMOVED, EVENT_JOB_MODIFIED
 import traceback
@@ -59,11 +64,13 @@ class Recipient(db.Model):
     recipient_last_name = db.Column(db.String(64), index=True, nullable=True, default='')
     recipient_phone_number = db.Column(db.String(22), index=True, unique=True, nullable=True, default='')
     recipient_email = db.Column(db.String(120), index=True, unique=True, nullable=True, default='')
-    recipient_type = db.Column(db.Enum('parent', 'student', 'lead', 'tutor', 'prospect', 'other', name='recipient_type'), index=True, nullable=True, default='')
+    recipient_type = db.Column(db.Enum('parent_1', 'parent_2', 'student', 'lead', 'tutor', 'prospect', 'other', name='recipient_type'), index=True, nullable=True, default='')
     recipient_tags = db.Column(db.ARRAY(db.String), index=True, nullable=True, default='')
     recipient_description = db.Column(db.String(200), index=True, nullable=True, default='')
     recipient_source_id = db.Column(db.String(8), index=True, nullable=True, unique=False, default='')
     is_active = db.Column(db.Boolean, unique=False,nullable=False, server_default='True')
+
+    #TODO possible but unlikely bug: if a former studnet goes on to be a tutor, there will be an error as phone numer and email should be unique; maybe research how ot make a compound priamry key and then do that using phone-number, email, and recipient type
 
     #how to edit enum type##
     #https://stackoverflow.com/questions/1771543/adding-a-new-value-to-an-existing-enum-type/7834949#7834949
@@ -169,50 +176,10 @@ Config.scheduler.add_listener(listen_for_job_added, EVENT_JOB_ADDED)
 Config.scheduler.add_listener(listen_for_job_removed, EVENT_JOB_REMOVED)
 Config.scheduler.add_listener(listen_for_job_modified, EVENT_JOB_MODIFIED)
 
-from sqlalchemy import event, DDL
-trig_ddl = DDL("""
-    CREATE TRIGGER customers_search_vector_update BEFORE INSERT OR UPDATE
-    ON customers
-    FOR EACH ROW EXECUTE PROCEDURE
-    tsvector_update_trigger(search_vector,'pg_catalog.english',customer_code,customer_name);
-""")
-tbl = Recipient.__table__
-event.listen(tbl, 'after_create', trig_ddl.execute_if(dialect='postgresql'))
+#event.listen(Recipient.__table__, 'after_create', trig_ddl.execute_if(dialect='postgresql'))
 
-@event.listens_for(db.engine, 'commit')
-def receive_commit(conn):
-    print('In receive_commit')
-    print("conn is {}".format(conn))
-    print("conn.get_transaction is {}".format(conn.get_transaction))
-    print("conn.info is {}".format(conn.info))
-    print("conn dir is {}".format(dir(conn)))
-    print("")
-
-
-
-@event.listens_for(db.engine, 'after_execute')
-def receive_after_execute(conn, clauseelement, multiparams, params, execution_options, result):
-    print('In after_execute')
-    print("conn is {}".format(conn))
-    print("clauseelement is {}".format(clauseelement))
-    print("multiparams is {}".format(multiparams))
-    print(" params is {}".format( params))
-    print("execution_options is {}".format(execution_options))
-    print("result is {}".format(result))
-    print("")
-
-@event.listens_for(db.engine, 'after_cursor_execute')
-def receive_after_cursor_execute(conn, cursor, statement, parameters, context, executemany):
-    print('In after_cursor_execute')
-    print("conn is {}".format(conn))
-    print("cursor is {}".format(cursor))
-    print("statement is {}".format(str(statement)))
-    #print("compiled statement is {}".format(statement.compile(compile_kwargs={"literal_binds": True})))
-    print("parameters is {}".format(parameters))
-    print("context is {}".format(context))
-    print("executemany is {}".format(executemany))
-    print("")
-
+q = Queue(connection=Redis(host='redis', port=6379, decode_responses=True),default_timeout=-1)
+result = q.enqueue(Worker(os.environ.get('psycopg_url'),os.environ.get('psycopg_db'),os.environ.get('psycopg_port'),Config.dbUserName,Config.dbPassword).dblisten)
 
 @event.listens_for(Student, 'after_insert')
 def receive_after_insert(mapper, connection, target):
@@ -226,12 +193,12 @@ def receive_after_insert(mapper, connection, target):
 
         if target.parent_1_email or target.parent_1_phone_number:
             recipient_id = AppDBUtil.createRecipientId()
-            connection.execute(recipient.insert().values(recipient_id=recipient_id, recipient_email=target.parent_1_email, recipient_first_name=target.parent_1_first_name, recipient_last_name=target.parent_1_last_name,recipient_phone_number=target.parent_1_phone_number,recipient_salutation=target.parent_1_salutation,recipient_type='parent', is_active=target.is_active,recipient_source_id=target.student_id))
+            connection.execute(recipient.insert().values(recipient_id=recipient_id, recipient_email=target.parent_1_email, recipient_first_name=target.parent_1_first_name, recipient_last_name=target.parent_1_last_name,recipient_phone_number=target.parent_1_phone_number,recipient_salutation=target.parent_1_salutation,recipient_type='parent_1', is_active=target.is_active,recipient_source_id=target.student_id))
             logger.info("Recipient {} inserted based on Student {}".format(recipient_id, target.student_id))
 
         if target.parent_2_email or target.parent_2_phone_number:
             recipient_id = AppDBUtil.createRecipientId()
-            connection.execute(recipient.insert().values(recipient_id=recipient_id, recipient_email=target.parent_2_email, recipient_first_name=target.parent_2_first_name, recipient_last_name=target.parent_2_last_name,recipient_phone_number=target.parent_2_phone_number,recipient_salutation=target.parent_2_salutation,recipient_type='parent',is_active=target.is_active,recipient_source_id=target.student_id))
+            connection.execute(recipient.insert().values(recipient_id=recipient_id, recipient_email=target.parent_2_email, recipient_first_name=target.parent_2_first_name, recipient_last_name=target.parent_2_last_name,recipient_phone_number=target.parent_2_phone_number,recipient_salutation=target.parent_2_salutation,recipient_type='parent_2',is_active=target.is_active,recipient_source_id=target.student_id))
             logger.info("Recipient {} inserted based on Student {}".format(recipient_id, target.student_id))
 
     except Exception as e:
@@ -278,8 +245,8 @@ def receive_after_insert(mapper, connection, target):
     try:
         recipient = Recipient.__table__
         recipient_id = AppDBUtil.createRecipientId()
-        connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.tutor_email,recipient_first_name=target.tutor_first_name,recipient_last_name=target.tutor_last_name,recipient_phone_number=target.tutor_phone_number,recipient_type='tutor',recipient_source_id=target.tutor_id))
-        logger.info("Recipient {} inserted based on Tutor {}".format(recipient_id,target.tutor_id))
+        connection.execute(recipient.insert().values(recipient_id=recipient_id,recipient_email=target.tutor_email,recipient_first_name=target.tutor_first_name,recipient_last_name=target.tutor_last_name,recipient_phone_number=target.tutor_phone_number,recipient_type='tutor',recipient_source_id=target.user_id))
+        logger.info("Recipient {} inserted based on Tutor {}".format(recipient_id,target.user_id))
 
     except Exception as e:
         logger.error("Error in Tutor receive_after_insert")
@@ -299,10 +266,10 @@ def receive_after_update(mapper, connection, target):
     #
     #     if target.parent_1_email or target.parent_1_phone_number:
     #         recipient_id = AppDBUtil.createRecipientId()
-    #         connection.execute(recipient.insert().values(recipient_id=recipient_id, recipient_email=target.parent_1_email, recipient_first_name=target.parent_1_first_name, recipient_last_name=target.parent_1_last_name,recipient_phone_number=target.parent_1_phone_number, recipient_type='parent', is_active=target.is_active))
+    #         connection.execute(recipient.insert().values(recipient_id=recipient_id, recipient_email=target.parent_1_email, recipient_first_name=target.parent_1_first_name, recipient_last_name=target.parent_1_last_name,recipient_phone_number=target.parent_1_phone_number, recipient_type='parent_1', is_active=target.is_active))
     #     if target.parent_2_email or target.parent_2_phone_number:
     #         recipient_id = AppDBUtil.createRecipientId()
-    #         connection.execute(recipient.insert().values(recipient_id=recipient_id, recipient_email=target.parent_2_email, recipient_first_name=target.parent_2_first_name, recipient_last_name=target.parent_2_last_name,recipient_phone_number=target.parent_2_phone_number, recipient_type='parent', is_active=target.is_active))
+    #         connection.execute(recipient.insert().values(recipient_id=recipient_id, recipient_email=target.parent_2_email, recipient_first_name=target.parent_2_first_name, recipient_last_name=target.parent_2_last_name,recipient_phone_number=target.parent_2_phone_number, recipient_type='parent_2', is_active=target.is_active))
     #
     # except Exception as e:
     #     print("Error in receive_after_insert")
@@ -320,10 +287,17 @@ def receive_after_delete(mapper, connection, target):
 
 
 db.create_all()
+
 try:
     db.session.commit()
+    with db.engine.connect() as con:
+        con.execute(text(student_table_trigger_text))
+        con.execute(text(tutor_table_trigger_text))
+        con.execute(text(lead_table_trigger_text))
+        con.execute(text(prospect_table_trigger_text))
 except:
     db.session.rollback()
     raise
 finally:
     db.session.close()
+
