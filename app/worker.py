@@ -1,8 +1,6 @@
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import select
 import psycopg2
-import os
-import uuid
 import traceback
 
 
