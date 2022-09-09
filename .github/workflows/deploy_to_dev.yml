@@ -44,10 +44,8 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
 
-      - name: Add environment variables to .env
-        run: |
-          echo NAMESPACE=${{ secrets.NAMESPACE }} >> .env
-          echo PERSONAL_ACCESS_TOKEN=${{ secrets.PERSONAL_ACCESS_TOKEN }} >> .env
+#      - name: Add environment variables to .env
+#        run: |
 #          echo DEBUG=0 >> .env
 #          echo SQL_ENGINE=django.db.backends.postgresql >> .env
 #          echo DATABASE=postgres >> .env
@@ -64,8 +62,6 @@ jobs:
           echo "NGINX_IMAGE=$(echo ${{env.NGINX_IMAGE}} )" >> $GITHUB_ENV
       - name: Log in to GitHub Packages
         run: |
-          echo ${PERSONAL_ACCESS_TOKEN}
-          echo ${NAMESPACE}
           echo ${PERSONAL_ACCESS_TOKEN} | docker login ghcr.io -u ${{ secrets.NAMESPACE }} --password-stdin
         env:
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -75,7 +71,7 @@ jobs:
           docker pull ${{ env.NGINX_IMAGE }} || true
       - name: Build images
         run: |
-          docker-compose -f docker-compose.ci.yml build
+          docker-compose build
       - name: Push images
         run: |
           docker push ${{ env.WEB_IMAGE }}
