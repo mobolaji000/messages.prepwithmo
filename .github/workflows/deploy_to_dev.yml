@@ -72,7 +72,7 @@ jobs:
       - name: Build images
         run: |
           ls
-          docker-compose -f ../../docker-compose-dev.yml build
+          docker-compose -f docker-compose-dev.yml build
       - name: Push images
         run: |
           docker push ${{ env.WEB_IMAGE }}
