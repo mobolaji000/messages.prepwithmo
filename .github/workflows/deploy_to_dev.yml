@@ -72,6 +72,8 @@ jobs:
       - name: Build images
         run: |
           docker-compose -f ../../docker-compose-dev build
+        with:
+          context: .
       - name: Push images
         run: |
           docker push ${{ env.WEB_IMAGE }}
