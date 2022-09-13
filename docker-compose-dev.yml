@@ -12,9 +12,9 @@ services:
         container_name: messages.prepwithmo
         build:
           context: .
-          dockerfile: Dockerfile.Local
+          dockerfile: Dockerfile.Service.Local
         env_file:
-            - ./DockerEnv
+            - DockerEnv-Dev
         extra_hosts:
             - "host:192.168.1.135"
         restart: always
@@ -30,7 +30,7 @@ services:
         extra_hosts:
             - "host:192.168.1.135"
         env_file:
-            - ./DockerEnv
+            - DockerEnv-Dev
         command: rq worker --url redis://redis:6379
         links:
             - redis
