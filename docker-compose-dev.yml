@@ -2,7 +2,6 @@ version: '3'
 services:
     redis:
         image: redis:4.0.6-alpine
-        build: .
         container_name: messages.redis
         ports:
           - "6379:6379"
