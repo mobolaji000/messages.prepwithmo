@@ -160,7 +160,7 @@ def listen_for_job_modified(event):
             #
             #
             # job_apscheduler_state = pickle.loads(job.job_apscheduler_state)
-            # job_trigger_type = str(job_apscheduler_state['trigger'].__class__.__name__).split('Trigger')[0]
+            # job_trigger_type = str(job_apscheduler_state['trigger'].__class__.__name__).split('Trigger')[0]#
             # job_status = ''
             #
             # if job_trigger_type == 'Date':
