@@ -12,7 +12,7 @@ services:
         container_name: messages.prepwithmo
         build:
           context: .
-          dockerfile: Dockerfile.Service.Local
+          dockerfile: Dockerfile.Service.Development
         env_file:
             - DockerEnv-Dev
         extra_hosts:
