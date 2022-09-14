@@ -74,6 +74,7 @@ jobs:
           docker-compose -f docker-compose-dev.yml build
       - name: Push images
         run: |
-          docker push ${{ env.WEB_IMAGE }}
-          docker push ${{ env.NGINX_IMAGE }}
+          docker push redis:4.0.6-alpine
+          docker push messages.prepwithmo
+          docker push messages.prepwithmo:latest
 
