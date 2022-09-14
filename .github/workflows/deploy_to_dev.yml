@@ -74,7 +74,7 @@ jobs:
           docker-compose -f docker-compose-dev.yml build
       - name: Push images
         run: |
-          docker push redis:4.0.6-alpine
+          docker push messages.redis
           docker push messages.prepwithmo
           docker push messages.prepwithmo:latest
 
