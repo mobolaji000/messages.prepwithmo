@@ -74,5 +74,5 @@ jobs:
           docker-compose -f docker-compose-dev.yml build
       - name: Push images
         run: |
-          docker push messages.prepwithmo:latest
+          docker push ghcr.io/mobolaji00/messages.prepwithmo:latest
 
