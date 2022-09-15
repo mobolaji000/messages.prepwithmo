@@ -76,5 +76,5 @@ jobs:
         run: |
 #          docker push messages.redis
 #          docker push messages.prepwithmo
-           docker push messages.prepwithmo:latest
+          docker push messages.prepwithmo:latest
 
