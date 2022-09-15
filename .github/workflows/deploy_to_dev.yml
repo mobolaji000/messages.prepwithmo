@@ -74,7 +74,7 @@ jobs:
           docker-compose -f docker-compose-dev.yml build
       - name: Push images
         run: |
-          docker push messages.redis
-          docker push messages.prepwithmo
-          docker push messages.prepwithmo:latest
+#          docker push messages.redis
+#          docker push messages.prepwithmo
+           docker push messages.prepwithmo:latest
 
