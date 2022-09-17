@@ -64,9 +64,8 @@ jobs:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
           ls
-          [!.]*
           scp  -o StrictHostKeyChecking=no -r ./.env mobolaji00@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/app
-          scp  -o StrictHostKeyChecking=no -r $(pwd) mobolaji00@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/app
+          rsync -rav -e ssh --include '*/' --exclude='.git/*' mobolaji00@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/app/ $(pwd)
           ssh -o StrictHostKeyChecking=no mobolaji00@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }} << 'ENDSSH'
             cd /app
             source .env
