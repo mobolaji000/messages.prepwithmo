@@ -7,3 +7,4 @@ Dockerfile.Service.Local
 Dockerfile.Worker.Local
 scrap.py
 data
+scrap.py
