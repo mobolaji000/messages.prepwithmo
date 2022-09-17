@@ -68,6 +68,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no mobolaji00@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }} << 'ENDSSH'
             cd /app
             source .env
-            docker-compose -f docker-compose.dev.yml up -d
+            sudo docker-compose -f docker-compose.dev.yml up -d
           ENDSSH
 
