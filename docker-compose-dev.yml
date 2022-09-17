@@ -8,7 +8,7 @@ services:
             - ./redis:/redis
 
     flask-app:
-        image: ghcr.io/mobolaji000/messages.prepwithmo
+        image: messages.prepwithmo
         container_name: messages.prepwithmo
         build:
           context: .
@@ -25,7 +25,7 @@ services:
 
 
     worker:
-        image: ghcr.io/mobolaji000/messages.prepwithmo:latest
+        image: messages.prepwithmo:latest
         depends_on:
             - redis
         extra_hosts:
