@@ -69,6 +69,8 @@ jobs:
           ssh -o StrictHostKeyChecking=no mobolaji00@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }} << 'ENDSSH'
             cd /app
             source .env
-            docker compose -f messages.prepwithmo/docker-compose-dev.yml up -d
+            docker compose down
+            docker compose -f messages.prepwithmo/docker-compose-dev.yml build
+            docker compose -f messages.prepwithmo/docker-compose-dev.yml up
           ENDSSH
 
