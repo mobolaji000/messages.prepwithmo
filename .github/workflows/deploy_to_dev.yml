@@ -64,7 +64,7 @@ jobs:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
           ls
-          scp  -o StrictHostKeyChecking=no -r . mobolaji00@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/app
+          scp  -o StrictHostKeyChecking=no -r / mobolaji00@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/app
           ssh -o StrictHostKeyChecking=no mobolaji00@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }} << 'ENDSSH'
             cd /app
             source .env
