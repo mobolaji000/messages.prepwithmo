@@ -7,7 +7,7 @@ from app import Config
 
 from redis import Redis
 from rq import Queue
-from worker import Worker
+from worker import DBListener
 import os
 
 from apscheduler.events import EVENT_JOB_ADDED, EVENT_JOB_REMOVED, EVENT_JOB_MODIFIED
@@ -179,7 +179,7 @@ Config.scheduler.add_listener(listen_for_job_modified, EVENT_JOB_MODIFIED)
 #event.listen(Recipient.__table__, 'after_create', trig_ddl.execute_if(dialect='postgresql'))
 
 q = Queue(connection=Redis(host='redis', port=6379, decode_responses=True),default_timeout=-1)
-result = q.enqueue(Worker(os.environ.get('psycopg_url'),os.environ.get('psycopg_db'),os.environ.get('psycopg_port'),Config.dbUserName,Config.dbPassword).dblisten)
+result = q.enqueue(DBListener(os.environ.get('psycopg_url'), os.environ.get('psycopg_db'), os.environ.get('psycopg_port'), Config.dbUserName, Config.dbPassword).dblisten)
 
 @event.listens_for(Student, 'after_insert')
 def receive_after_insert(mapper, connection, target):

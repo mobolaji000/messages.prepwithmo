@@ -15,7 +15,7 @@ logger.addHandler(handler)
 
 
 
-class Worker():
+class DBListener():
     def __init__(self, url=None,db=None,port=None,username=None, password=None):
         # self.dbUserName = os.environ.get('dbUserNameLocal')
         # self.dbPassword = os.environ.get('dbPasswordLocal')

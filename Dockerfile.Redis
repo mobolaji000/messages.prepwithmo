@@ -3,3 +3,5 @@ FROM redis:4.0.6-alpine
 
 EXPOSE 6379
 ENV LISTEN_PORT 6379
+
+

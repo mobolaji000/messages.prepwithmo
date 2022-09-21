@@ -1,7 +1,7 @@
 version: '3'
 services:
     redis:
-        image: redis:4.0.6-alpine
+        image: redis:7.0.4-alpine
         ports:
           - "6379:6379"
         volumes:
@@ -9,7 +9,7 @@ services:
 
     flask-app:
         image: messages.prepwithmo
-        container_name: messages.prepwithmo
+        #container_name: messages.prepwithmo
         build:
           context: .
           dockerfile: Dockerfile.Service.Development
@@ -25,7 +25,10 @@ services:
 
 
     worker:
-        image: messages.prepwithmo:latest
+        image: dblistener.messages.prepwithmo
+        build:
+            context: .
+            dockerfile: Dockerfile.Worker.Development
         depends_on:
             - redis
         extra_hosts:
