@@ -7,7 +7,7 @@ from app import Config
 
 from redis import Redis
 from rq import Queue
-from worker import DBListener
+from dblistener import DBListener
 import os
 
 from apscheduler.events import EVENT_JOB_ADDED, EVENT_JOB_REMOVED, EVENT_JOB_MODIFIED
