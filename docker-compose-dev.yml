@@ -2,6 +2,7 @@ version: '3'
 services:
     redis:
         image: redis:7.0.4-alpine
+        container_name: redis.messages.prepwithmo
         ports:
           - "6379:6379"
         volumes:
