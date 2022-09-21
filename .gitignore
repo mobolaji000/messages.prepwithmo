@@ -8,3 +8,4 @@ Dockerfile.Worker.Local
 scrap.py
 data
 scrap.py
+*.pyc
