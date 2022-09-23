@@ -73,3 +73,14 @@ jobs:
         run: |
           ls
           cat Dockerfile.Service.Development
+          scp  -o StrictHostKeyChecking=no -r ./.env mobolaji00@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/app
+          rsync -rav -e ssh --include '*/' --exclude='.git/*' mobolaji00@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/app/ $(pwd)/messages.prepwithmo
+          ssh -o StrictHostKeyChecking=no mobolaji00@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }} << 'ENDSSH'
+            cd /app
+            source .env
+            docker compose down
+            docker compose -f messages.prepwithmo/docker-compose-dev.yml build --build-arg SMTP_USERNAME=$SMTP_USERNAME
+            docker compose -f messages.prepwithmo/docker-compose-dev.yml up
+          ENDSSH
+
+
