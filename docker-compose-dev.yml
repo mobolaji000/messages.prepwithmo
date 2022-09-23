@@ -1,11 +1,11 @@
 version: '3'
 services:
-    redis:
-        image: redis:4.0.6-alpine
-        ports:
-          - "6379:6379"
-        volumes:
-            - ./redis:/redis
+#    redis:
+#        image: redis:4.0.6-alpine
+#        ports:
+#          - "6379:6379"
+#        volumes:
+#            - ./redis:/redis
 
     flask-app:
         image: messages.prepwithmo
@@ -24,17 +24,17 @@ services:
             - ./app:/app
 
 
-    worker:
-        image: dblistener.messages.prepwithmo
-        build:
-            context: .
-            dockerfile: Dockerfile.Worker.Development
-        depends_on:
-            - redis
-        extra_hosts:
-            - "host:192.168.1.135"
-        env_file:
-            - DockerEnv-Dev
-        command: rq worker --url redis://redis:6379
-        links:
-            - redis
+#    worker:
+#        image: dblistener.messages.prepwithmo
+#        build:
+#            context: .
+#            dockerfile: Dockerfile.Worker.Development
+#        depends_on:
+#            - redis
+#        extra_hosts:
+#            - "host:192.168.1.135"
+#        env_file:
+#            - DockerEnv-Dev
+#        command: rq worker --url redis://redis:6379
+#        links:
+#            - redis
