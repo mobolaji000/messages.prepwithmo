@@ -17,8 +17,10 @@ class AWSInstance():
         aws_secret_access_key = os.environ.get('aws_secret_access_key', '')
 
         if aws_access_key_id != '' and aws_secret_access_key != '':
+            print("Access key id and secret are empty!")
             session = boto3.session.Session(aws_access_key_id=aws_access_key_id,aws_secret_access_key=aws_secret_access_key)
         else:
+            print("Access key id and secret are NOT empty!")
             session = boto3.session.Session()
         client = session.client(
             service_name=service_name,
