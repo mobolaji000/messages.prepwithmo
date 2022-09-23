@@ -72,3 +72,4 @@ jobs:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
           ls
+          cat Dockerfile.Service.Development
