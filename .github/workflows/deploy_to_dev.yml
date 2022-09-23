@@ -50,6 +50,14 @@ jobs:
           echo SQL_ENGINE=django.db.backends.postgresql >> .env
           echo DATABASE=postgres >> .env
           echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+          echo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} >> .env
+          echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env
+          echo SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }} >> .env
+          echo SMTP_USERNAME=${{ secrets.SMTP_USERNAME }} >> .env
+          echo TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }} >> .env
+          echo TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }} >> .env
+          echo TWILIO_MESSAGING_SERVICE_SID=${{ secrets.TWILIO_MESSAGING_SERVICE_SID }} >> .env
+          echo TWILIO_SMS_NUMBER=${{ secrets.TWILIO_SMS_NUMBER }} >> .env
 
       - name: Add the private SSH key to the ssh-agent
         env:
