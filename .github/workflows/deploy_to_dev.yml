@@ -79,8 +79,8 @@ jobs:
             cd /app
             source .env
             docker compose down
-            docker compose -f app/docker-compose-dev.yml build --build-arg SMTP_USERNAME=$SMTP_USERNAME
-            docker compose -f app/docker-compose-dev.yml up
+            docker compose -f docker-compose-dev.yml build --build-arg SMTP_USERNAME=$SMTP_USERNAME
+            docker compose -f docker-compose-dev.yml up
           ENDSSH
 
 
