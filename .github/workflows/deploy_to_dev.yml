@@ -70,7 +70,7 @@ jobs:
       - name: Build and deploy images on DigitalOcean
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: >
+        run: |
           ls
           cat Dockerfile.Service.Development
           scp  -o StrictHostKeyChecking=no -r ./.env mobolaji00@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/app
@@ -80,16 +80,16 @@ jobs:
             cd /app
             source .env
             docker compose down
-            docker compose -f docker-compose-dev.yml build \
-            --build-arg SMTP_USERNAME=$SMTP_USERNAME \
-            --build-arg SMTP_PASSWORD=$SMTP_PASSWORD \
-            --build-arg AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
-            --build-arg AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
-            --build-arg TWILIO_ACCOUNT_SID=$TWILIO_ACCOUNT_SID \
-            --build-arg TWILIO_AUTH_TOKEN=$TWILIO_AUTH_TOKEN \
-            --build-arg TWILIO_MESSAGING_SERVICE_SID=$TWILIO_MESSAGING_SERVICE_SID \
-            --build-arg TWILIO_SMS_NUMBER=$STWILIO_SMS_NUMBER \
-            --build-arg GOOGLE_CREDENTIALS_JSON=$GOOGLE_CREDENTIALS_JSON \
+            docker compose -f docker-compose-dev.yml build 
+              --build-arg SMTP_USERNAME=$SMTP_USERNAME 
+              --build-arg SMTP_PASSWORD=$SMTP_PASSWORD 
+              --build-arg AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID 
+              --build-arg AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY 
+              --build-arg TWILIO_ACCOUNT_SID=$TWILIO_ACCOUNT_SID 
+              --build-arg TWILIO_AUTH_TOKEN=$TWILIO_AUTH_TOKEN 
+              --build-arg TWILIO_MESSAGING_SERVICE_SID=$TWILIO_MESSAGING_SERVICE_SID 
+              --build-arg TWILIO_SMS_NUMBER=$STWILIO_SMS_NUMBER 
+              --build-arg GOOGLE_CREDENTIALS_JSON=$GOOGLE_CREDENTIALS_JSON 
             docker compose -f docker-compose-dev.yml up
           ENDSSH
 
