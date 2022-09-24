@@ -23,7 +23,6 @@ services:
         volumes:
             - ./app:/app
 
-
     worker:
         image: dblistener.messages.prepwithmo
         build:
