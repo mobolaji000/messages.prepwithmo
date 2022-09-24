@@ -79,7 +79,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no mobolaji00@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }} << 'ENDSSH'
             cd /app
             source .env
-            docker system prune << 'y'
+            echo "y" |docker system prune
             service docker stop
             service docker start
             docker compose down
