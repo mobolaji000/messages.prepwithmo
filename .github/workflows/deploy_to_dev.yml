@@ -80,7 +80,7 @@ jobs:
             cd /app
             source .env
             docker compose down
-            docker compose -f docker-compose-dev.yml build \
+            docker compose docker-compose-dev.yml build \
               --build-arg SMTP_USERNAME=$SMTP_USERNAME \
               --build-arg SMTP_PASSWORD=$SMTP_PASSWORD \
               --build-arg AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
