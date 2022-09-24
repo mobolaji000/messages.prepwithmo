@@ -70,7 +70,7 @@ jobs:
       - name: Build and deploy images on DigitalOcean
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: |
+        run: >
           ls
           cat Dockerfile.Service.Development
           scp  -o StrictHostKeyChecking=no -r ./.env mobolaji00@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/app
