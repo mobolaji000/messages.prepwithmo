@@ -7,8 +7,8 @@ services:
         build:
           context: .
           dockerfile: Dockerfile.Service.Development
-        env_file:
-            - DockerEnv-Dev
+#        env_file:
+#            - DockerEnv-Dev
         extra_hosts:
             - "host:192.168.1.135"
         restart: always
