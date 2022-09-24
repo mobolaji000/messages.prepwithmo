@@ -75,7 +75,7 @@ jobs:
           cat Dockerfile.Service.Development
           scp  -o StrictHostKeyChecking=no -r ./.env mobolaji00@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/app
           echo $(pwd)
-          rsync -rav -e --include '*/' --exclude='.git/*' mobolaji00@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/app/ $(pwd)/messages.prepwithmo/
+          rsync -rav -e ssh --include '*/' --exclude='.git/*' $(pwd)/messages.prepwithmo/ mobolaji00@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/app/ 
           ssh -o StrictHostKeyChecking=no mobolaji00@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }} << 'ENDSSH'
             cd /app
             source .env
