@@ -77,11 +77,6 @@ class Config(object):
 
         elif os.environ['DEPLOY_REGION'] == 'dev':
 
-            logger.debug("Environment is dev")
-            logger.debug("SMTP_USERNAME is: {}".format(os.environ['SMTP_USERNAME']))
-            logger.debug("SMTP_PASSWORD is: {}".format(os.environ['SMTP_PASSWORD']))
-
-
             os.environ["url_to_start_reminder"] = "https://dev-messages-prepwithmo-hnhgb.ondigitalocean.app/"
             flask_secret_key = awsInstance.get_secret("vensti_admin", "flask_secret_key")
             SECRET_KEY = awsInstance.get_secret("vensti_admin", "flask_secret_key")
