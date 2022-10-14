@@ -178,8 +178,8 @@ Config.scheduler.add_listener(listen_for_job_modified, EVENT_JOB_MODIFIED)
 
 #event.listen(Recipient.__table__, 'after_create', trig_ddl.execute_if(dialect='postgresql'))#
 
-q = Queue(connection=Redis(host='redis', port=6379, decode_responses=True),default_timeout=-1)
-result = q.enqueue(DBListener(os.environ.get('psycopg_url'), os.environ.get('psycopg_db'), os.environ.get('psycopg_port'), Config.dbUserName, Config.dbPassword).dblisten)
+# q = Queue(connection=Redis(host='redis', port=6379, decode_responses=True),default_timeout=-1)
+# result = q.enqueue(DBListener(os.environ.get('psycopg_url'), os.environ.get('psycopg_db'), os.environ.get('psycopg_port'), Config.dbUserName, Config.dbPassword).dblisten)
 
 @event.listens_for(Student, 'after_insert')
 def receive_after_insert(mapper, connection, target):
@@ -290,11 +290,11 @@ db.create_all()
 
 try:
     db.session.commit()
-    with db.engine.connect() as con:
-        con.execute(text(student_table_trigger_text))
-        con.execute(text(tutor_table_trigger_text))
-        con.execute(text(lead_table_trigger_text))
-        con.execute(text(prospect_table_trigger_text))
+    # with db.engine.connect() as con:
+    #     con.execute(text(student_table_trigger_text))
+    #     con.execute(text(tutor_table_trigger_text))
+    #     con.execute(text(lead_table_trigger_text))
+    #     con.execute(text(prospect_table_trigger_text))
 except:
     db.session.rollback()
     raise
