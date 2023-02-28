@@ -69,7 +69,7 @@ class Recipient(db.Model):
     recipient_description = db.Column(db.String(200), index=True, nullable=True, default='')
     recipient_source_id = db.Column(db.String(8), index=True, nullable=True, unique=False, default='')
     is_active = db.Column(db.Boolean, unique=False,nullable=False, server_default='True')
-
+    
     #TODO possible but unlikely bug: if a former studnet goes on to be a tutor, there will be an error as phone numer and email should be unique; maybe research how ot make a compound priamry key and then do that using phone-number, email, and recipient type
 
     #how to edit enum type##
